@@ -8,109 +8,138 @@
 <style>
 body{
     margin:0;
-    font-family:Arial, sans-serif;
-    background:#0b1220;
+    font-family:'Segoe UI',sans-serif;
+    background: radial-gradient(circle at top,#0f1b2e,#050b16);
     color:white;
 }
+
 .container{
     max-width:520px;
     margin:auto;
     padding:20px;
 }
+
 .logo{
     text-align:center;
-    margin-top:10px;
+    margin-top:15px;
 }
+
+.logo h2{
+    font-weight:700;
+    letter-spacing:1px;
+    background:linear-gradient(90deg,#00ffc8,#00a2ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
 .badge{
     display:inline-block;
-    padding:6px 14px;
-    border-radius:20px;
-    background:#0f2d26;
-    color:#00ffb3;
-    font-size:12px;
+    padding:6px 16px;
+    border-radius:30px;
+    background:rgba(0,255,200,0.08);
+    color:#00ffc8;
+    font-size:11px;
+    letter-spacing:1px;
+    border:1px solid rgba(0,255,200,0.2);
 }
+
 .card{
-    background:#111a2e;
-    border-radius:18px;
-    padding:18px;
-    margin-top:15px;
-    box-shadow:0 0 25px rgba(0,0,0,0.4);
+    background:rgba(17,26,46,0.75);
+    backdrop-filter:blur(18px);
+    border-radius:20px;
+    padding:22px;
+    margin-top:18px;
+    box-shadow:0 0 40px rgba(0,255,200,0.08);
+    border:1px solid rgba(255,255,255,0.05);
 }
+
 label{
-    font-size:13px;
-    color:#aab3c5;
+    font-size:12px;
+    color:#8fa3c7;
     display:block;
-    margin-top:14px;
-    margin-bottom:6px;
+    margin-top:15px;
 }
+
 select,input{
     width:100%;
-    padding:12px;
-    border-radius:12px;
-    border:none;
-    background:#0c1426;
+    padding:13px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,0.05);
+    background:#0c1628;
     color:white;
-    font-size:14px;
+    font-size:13px;
+    margin-top:6px;
 }
+
 .multi{
     height:160px;
 }
+
 .timeframe{
     display:flex;
     gap:8px;
     margin-top:8px;
 }
+
 .tf-btn{
     flex:1;
     padding:10px;
-    border-radius:10px;
-    border:1px solid #1e2b4a;
-    background:#0c1426;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:#0c1628;
     color:white;
     cursor:pointer;
+    transition:0.3s;
 }
+
 .tf-btn.active{
-    background:#00c389;
+    background:linear-gradient(90deg,#00ffc8,#00a2ff);
     color:black;
     font-weight:bold;
 }
+
 .generate-btn{
     width:100%;
-    padding:15px;
-    margin-top:18px;
+    padding:16px;
+    margin-top:20px;
     border:none;
-    border-radius:14px;
-    background:linear-gradient(90deg,#00ffa3,#00c389);
-    font-size:17px;
+    border-radius:16px;
+    background:linear-gradient(90deg,#00ffc8,#00a2ff);
+    font-size:16px;
     font-weight:bold;
     cursor:pointer;
+    transition:0.3s;
 }
+
+.generate-btn:hover{
+    transform:scale(1.02);
+    box-shadow:0 0 25px rgba(0,255,200,0.4);
+}
+
 .signal-box{
-    margin-top:18px;
-    background:#07101f;
+    margin-top:20px;
+    background:#061021;
     border-radius:15px;
     padding:15px;
-    max-height:300px;
+    max-height:260px;
     overflow:auto;
-}
-.signal{
-    padding:10px;
-    border-bottom:1px solid #1b2a4d;
-    display:flex;
-    justify-content:space-between;
+    font-family:'Courier New',monospace;
     font-size:13px;
+    line-height:1.6;
 }
+
 .btn{
     width:100%;
-    padding:12px;
-    margin-top:10px;
+    padding:13px;
+    margin-top:12px;
     border:none;
-    border-radius:12px;
-    background:#1e2b4a;
+    border-radius:14px;
+    background:#111f38;
     color:white;
     cursor:pointer;
     font-weight:bold;
 }
+
 .telegram{
     background:linear-gradient(90deg,#229ED9,#0088cc);
 }
@@ -129,9 +158,9 @@ select,input{
 
 <label>Market</label>
 <select id="market" onchange="updateAssets()">
-    <option value="REAL">Real Market</option>
-    <option value="OTC">OTC Market</option>
-    <option value="CRYPTO">Crypto OTC</option>
+<option value="REAL">Real Market</option>
+<option value="OTC">OTC Market</option>
+<option value="CRYPTO">Crypto OTC</option>
 </select>
 
 <label>🔍 Search Asset</label>
@@ -142,17 +171,17 @@ select,input{
 
 <label>Direction</label>
 <select id="direction">
-    <option value="BOTH">Call & Put (Auto)</option>
-    <option value="CALL">Call Only</option>
-    <option value="PUT">Put Only</option>
+<option value="BOTH">Call & Put (Auto)</option>
+<option value="CALL">Call Only</option>
+<option value="PUT">Put Only</option>
 </select>
 
 <label>Timeframe</label>
 <div class="timeframe">
-    <button class="tf-btn active" onclick="setTF('M1',this)">M1</button>
-    <button class="tf-btn" onclick="setTF('M5',this)">M5</button>
-    <button class="tf-btn" onclick="setTF('M15',this)">M15</button>
-    <button class="tf-btn" onclick="setTF('M30',this)">M30</button>
+<button class="tf-btn active" onclick="setTF('M1',this)">M1</button>
+<button class="tf-btn" onclick="setTF('M5',this)">M5</button>
+<button class="tf-btn" onclick="setTF('M15',this)">M15</button>
+<button class="tf-btn" onclick="setTF('M30',this)">M30</button>
 </div>
 
 <label>Number of Signals</label>
@@ -169,143 +198,126 @@ select,input{
 <div class="signal-box" id="signals"></div>
 
 <button class="btn" onclick="copySignals()">📋 Copy All Signals</button>
-<button class="btn telegram" onclick="copyTelegram()">📱 Copy for Telegram (1-Click)</button>
+<button class="btn telegram" onclick="copyTelegram()">📱 Copy for Telegram</button>
 
 </div>
 </div>
 
 <script>
-// ===== ASSETS =====
-const realAssets = ["EUR/USD","GBP/USD","USD/JPY","AUD/JPY","EUR/JPY","GBP/JPY","USD/CAD","AUD/CAD","EUR/GBP","USD/CHF"];
+const realAssets=["EUR/USD","GBP/USD","USD/JPY","AUD/JPY","EUR/JPY","GBP/JPY","USD/CAD","AUD/CAD","EUR/GBP","USD/CHF"];
 
-const otcAssets = ["USD/ARS(OTC)","USD/BDT(OTC)","USD/EGP(OTC)","USD/INR(OTC)","USD/IDR(OTC)","USD/MXN(OTC)",
+const otcAssets=["USD/ARS(OTC)","USD/BDT(OTC)","USD/EGP(OTC)","USD/INR(OTC)","USD/IDR(OTC)","USD/MXN(OTC)",
 "EUR/AUD(OTC)","EUR/CHF(OTC)","EUR/SGD(OTC)","GBP/CHF(OTC)","NZD/CAD(OTC)","AUD/NZD(OTC)",
 "CAD/CHF(OTC)","EUR/NZD(OTC)","USD/PHP(OTC)","GBP/NZD(OTC)","USD/BRL(OTC)","USD/ZAR(OTC)",
 "EUR/CAD(OTC)","AUD/CHF(OTC)","CHF/JPY(OTC)","NZD/CHF(OTC)","USD/COP(OTC)","USD/DZD(OTC)",
 "USD/NGN(OTC)","USD/TRY(OTC)","USD/PKR(OTC)","NZD/JPY(OTC)","NZD/USD(OTC)"];
 
-const cryptoAssets = [
-"Bitcoin (OTC)","Ethereum (OTC)","Solana (OTC)","Ripple (OTC)","Cardano (OTC)",
+const cryptoAssets=["Bitcoin (OTC)","Ethereum (OTC)","Solana (OTC)","Ripple (OTC)","Cardano (OTC)",
 "Avalanche (OTC)","Dogecoin (OTC)","Litecoin (OTC)","TRON (OTC)","Polkadot (OTC)",
-"Chainlink (OTC)","Shiba Inu (OTC)","Pepe (OTC)","Toncoin (OTC)","Binance Coin (OTC)"
-];
+"Chainlink (OTC)","Shiba Inu (OTC)","Pepe (OTC)","Toncoin (OTC)","Binance Coin (OTC)"];
 
-let currentAssets = [];
-let timeframe = "M1";
+let currentAssets=[];
+let timeframe="M1";
+let lastSignals=[];
 
-// ===== LOAD ASSETS =====
 function updateAssets(){
-    const market = document.getElementById("market").value;
-    if(market==="REAL") currentAssets = realAssets;
-    else if(market==="OTC") currentAssets = otcAssets;
-    else currentAssets = cryptoAssets;
-    renderAssets(currentAssets);
+const market=document.getElementById("market").value;
+if(market==="REAL") currentAssets=realAssets;
+else if(market==="OTC") currentAssets=otcAssets;
+else currentAssets=cryptoAssets;
+renderAssets(currentAssets);
 }
 
 function renderAssets(arr){
-    const list = document.getElementById("assetList");
-    list.innerHTML="";
-    arr.forEach(a=>{
-        let opt=document.createElement("option");
-        opt.value=a;
-        opt.textContent=a;
-        list.appendChild(opt);
-    });
+const list=document.getElementById("assetList");
+list.innerHTML="";
+arr.forEach(a=>{
+let opt=document.createElement("option");
+opt.value=a;
+opt.textContent=a;
+list.appendChild(opt);
+});
 }
 
-// ===== SEARCH =====
 function filterAssets(){
-    const text=document.getElementById("assetSearch").value.toLowerCase();
-    const filtered=currentAssets.filter(a=>a.toLowerCase().includes(text));
-    renderAssets(filtered);
+const text=document.getElementById("assetSearch").value.toLowerCase();
+const filtered=currentAssets.filter(a=>a.toLowerCase().includes(text));
+renderAssets(filtered);
 }
 
-// ===== TIMEFRAME =====
 function setTF(tf,el){
-    timeframe=tf;
-    document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
-    el.classList.add("active");
+timeframe=tf;
+document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
+el.classList.add("active");
 }
 
-// ===== GET SELECTED (MAX 5) =====
 function getSelectedAssets(){
-    const selected=[...document.getElementById("assetList").selectedOptions].map(o=>o.value);
-    if(selected.length===0){ alert("Select at least 1 asset"); return null; }
-    if(selected.length>5){ alert("Maximum 5 assets allowed!"); return null; }
-    return selected;
+const selected=[...document.getElementById("assetList").selectedOptions].map(o=>o.value);
+if(selected.length===0){alert("Select at least 1 asset");return null;}
+if(selected.length>5){alert("Maximum 5 assets allowed!");return null;}
+return selected;
 }
 
-let lastSignals=[];
-
-// ===== GENERATE SIGNALS =====
 function generateSignals(){
-    const assets=getSelectedAssets();
-    if(!assets) return;
+const assets=getSelectedAssets();
+if(!assets) return;
 
-    const direction=document.getElementById("direction").value;
-    const count=parseInt(document.getElementById("count").value);
-    const start=document.getElementById("start").value;
-    const end=document.getElementById("end").value;
+const direction=document.getElementById("direction").value;
+const count=parseInt(document.getElementById("count").value);
+const start=document.getElementById("start").value;
+const end=document.getElementById("end").value;
 
-    let box=document.getElementById("signals");
-    box.innerHTML="";
-    lastSignals=[];
+let box=document.getElementById("signals");
+box.innerHTML="";
+lastSignals=[];
 
-    let [sh,sm]=start.split(":").map(Number);
-    let [eh,em]=end.split(":").map(Number);
+let [sh,sm]=start.split(":").map(Number);
+let [eh,em]=end.split(":").map(Number);
 
-    let startMin=sh*60+sm;
-    let endMin=eh*60+em;
+let startMin=sh*60+sm;
+let endMin=eh*60+em;
 
-    if(endMin<=startMin){ alert("End Time must be greater than Start Time"); return; }
+if(endMin<=startMin){alert("End Time must be greater than Start Time");return;}
 
-    let gap=(endMin-startMin)/count;
+let gap=(endMin-startMin)/count;
 
-    for(let i=1;i<=count;i++){
-        let current=Math.floor(startMin+(gap*i));
-        let h=Math.floor(current/60);
-        let m=current%60;
+for(let i=1;i<=count;i++){
+let current=Math.floor(startMin+(gap*i));
+let h=Math.floor(current/60);
+let m=current%60;
 
-        let date=new Date();
-        date.setHours(h);
-        date.setMinutes(m);
+let timeStr=(h<10?"0"+h:h)+":"+(m<10?"0"+m:m);
+let asset=assets[Math.floor(Math.random()*assets.length)];
 
-        let timeStr=date.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-        let asset=assets[Math.floor(Math.random()*assets.length)];
+let cleanAsset=asset.replace("(OTC)","-OTC").replace("/","");
+let finalDir;
+if(direction==="CALL") finalDir="BUY";
+else if(direction==="PUT") finalDir="PUT";
+else finalDir=Math.random()>0.5?"BUY":"PUT";
 
-        let dir="";
-        if(direction==="CALL") dir="CALL ⬆";
-        else if(direction==="PUT") dir="PUT ⬇";
-        else dir=Math.random()>0.5?"CALL ⬆":"PUT ⬇";
+let signalText=`${timeStr}:${cleanAsset}:${finalDir}`;
+lastSignals.push(signalText);
 
-        let signalText=`${timeStr} | ${asset} | ${timeframe} | ${dir}`;
-        lastSignals.push(signalText);
-
-        box.innerHTML+=`<div class="signal"><span>#${i}</span><span>${asset}</span><span>${timeStr}</span><span>${dir}</span></div>`;
-    }
+box.innerHTML+=`<div>${signalText}</div>`;
+}
 }
 
-// ===== COPY NORMAL =====
 function copySignals(){
-    navigator.clipboard.writeText(lastSignals.join("\n"));
-    alert("Signals Copied!");
+navigator.clipboard.writeText(lastSignals.join("\n"));
+alert("Signals Copied!");
 }
 
-// ===== TELEGRAM 1-CLICK FORMAT =====
 function copyTelegram(){
-    if(lastSignals.length===0){ alert("Generate signals first!"); return; }
+if(lastSignals.length===0){alert("Generate signals first!");return;}
 
-    let msg="🔥 AI MONEY SIGNALS 🔥\n\n";
-    lastSignals.forEach((s,i)=>{
-        msg+=`#${i+1} ${s}\n`;
-    });
-    msg+="\n⚡ Powered by AI Signals";
+let msg="🔥 AI MONEY SIGNALS 🔥\n\n";
+lastSignals.forEach((s,i)=>{msg+=`#${i+1} ${s}\n`;});
+msg+="\n⚡ Powered by AI Signals";
 
-    navigator.clipboard.writeText(msg);
-    alert("Telegram Format Signals Copied!");
+navigator.clipboard.writeText(msg);
+alert("Telegram Format Signals Copied!");
 }
 
-// AUTO LOAD
 window.onload=updateAssets;
 </script>
 </body>
