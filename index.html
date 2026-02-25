@@ -12,18 +12,15 @@ body{
     background: radial-gradient(circle at top,#0f1b2e,#050b16);
     color:white;
 }
-
 .container{
     max-width:520px;
     margin:auto;
     padding:20px;
 }
-
 .logo{
     text-align:center;
     margin-top:15px;
 }
-
 .logo h2{
     font-weight:700;
     letter-spacing:1px;
@@ -31,7 +28,6 @@ body{
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
-
 .badge{
     display:inline-block;
     padding:6px 16px;
@@ -39,10 +35,8 @@ body{
     background:rgba(0,255,200,0.08);
     color:#00ffc8;
     font-size:11px;
-    letter-spacing:1px;
     border:1px solid rgba(0,255,200,0.2);
 }
-
 .card{
     background:rgba(17,26,46,0.75);
     backdrop-filter:blur(18px);
@@ -50,16 +44,13 @@ body{
     padding:22px;
     margin-top:18px;
     box-shadow:0 0 40px rgba(0,255,200,0.08);
-    border:1px solid rgba(255,255,255,0.05);
 }
-
 label{
     font-size:12px;
     color:#8fa3c7;
     display:block;
     margin-top:15px;
 }
-
 select,input{
     width:100%;
     padding:13px;
@@ -70,13 +61,11 @@ select,input{
     font-size:13px;
     margin-top:6px;
 }
-
 .timeframe{
     display:flex;
     gap:8px;
     margin-top:8px;
 }
-
 .tf-btn{
     flex:1;
     padding:10px;
@@ -86,13 +75,11 @@ select,input{
     color:white;
     cursor:pointer;
 }
-
 .tf-btn.active{
     background:linear-gradient(90deg,#00ffc8,#00a2ff);
     color:black;
     font-weight:bold;
 }
-
 .generate-btn{
     width:100%;
     padding:16px;
@@ -104,7 +91,6 @@ select,input{
     font-weight:bold;
     cursor:pointer;
 }
-
 .signal-box{
     margin-top:20px;
     background:#061021;
@@ -114,9 +100,7 @@ select,input{
     overflow:auto;
     font-family:'Courier New',monospace;
     font-size:13px;
-    line-height:1.6;
 }
-
 .btn{
     width:100%;
     padding:13px;
@@ -128,16 +112,10 @@ select,input{
     cursor:pointer;
     font-weight:bold;
 }
-
 .telegram{
     background:linear-gradient(90deg,#229ED9,#0088cc);
 }
-
-/* Search Dropdown */
-.search-wrapper{
-    position:relative;
-}
-
+.search-wrapper{position:relative;}
 .dropdown{
     position:absolute;
     width:100%;
@@ -150,25 +128,46 @@ select,input{
     display:none;
     z-index:99;
 }
-
 .dropdown div{
     padding:10px;
     cursor:pointer;
-    font-size:13px;
 }
+.dropdown div:hover{background:#16233d;}
 
-.dropdown div:hover{
-    background:#16233d;
+/* Access Modal */
+.modal{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+}
+.modal-box{
+    background:#0c1628;
+    padding:25px;
+    border-radius:18px;
+    width:90%;
+    max-width:350px;
+    text-align:center;
+}
+.modal-box h3{
+    margin-top:0;
+}
+.access-footer{
+    margin-top:15px;
+    font-size:12px;
+    color:#8fa3c7;
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-
 <div class="logo">
-    <h2>Money Signals AI</h2>
-    <div class="badge">PRO TRADING INTELLIGENCE</div>
+<h2>Money Signals AI</h2>
+<div class="badge">PRO TRADING INTELLIGENCE</div>
 </div>
 
 <div class="card">
@@ -210,7 +209,7 @@ select,input{
 <label>End Time</label>
 <input type="time" id="end" value="21:00">
 
-<button class="generate-btn" onclick="generateSignals()">Generate AI Signals</button>
+<button class="generate-btn" onclick="openAccess()">Generate AI Signals</button>
 
 <div class="signal-box" id="signals"></div>
 
@@ -220,30 +219,50 @@ select,input{
 </div>
 </div>
 
-<script>
-const realAssets=["EUR/USD","GBP/USD","USD/JPY","AUD/JPY","EUR/JPY","GBP/JPY","USD/CAD","AUD/CAD","EUR/GBP","USD/CHF"];
-const otcAssets=["USD/ARS(OTC)","USD/BDT(OTC)","USD/EGP(OTC)","USD/INR(OTC)","USD/IDR(OTC)","USD/MXN(OTC)","USD/TRY(OTC)","NZD/CAD(OTC)"];
-const cryptoAssets=["Bitcoin (OTC)","Ethereum (OTC)","Solana (OTC)","TRON (OTC)"];
+<!-- Access Modal -->
+<div class="modal" id="accessModal">
+<div class="modal-box">
+<h3>🔐 Premium Access Required</h3>
+<input type="password" id="accessInput" placeholder="Enter Access Code">
+<button class="generate-btn" onclick="checkAccess()">Unlock</button>
+<div class="access-footer">
+Access Required? Contact: <strong>@CryptoParvej</strong>
+</div>
+</div>
+</div>
 
-let currentAssets=[];
+<script>
+const ACCESS_CODE="125800";
+let accessGranted=false;
+
+function openAccess(){
+document.getElementById("accessModal").style.display="flex";
+}
+
+function checkAccess(){
+let code=document.getElementById("accessInput").value;
+if(code===ACCESS_CODE){
+accessGranted=true;
+document.getElementById("accessModal").style.display="none";
+generateSignals();
+}else{
+alert("Invalid Access Code");
+}
+}
+
+const otcAssets=["USD/BDT(OTC)","USD/NGN(OTC)","USD/TRY(OTC)"];
 let selectedAsset="";
 let timeframe="M1";
 let lastSignals=[];
 
-function updateAssets(){
-const market=document.getElementById("market").value;
-if(market==="REAL") currentAssets=realAssets;
-else if(market==="OTC") currentAssets=otcAssets;
-else currentAssets=cryptoAssets;
-}
+function updateAssets(){}
 
 function filterAssets(){
-const text=document.getElementById("assetSearch").value.toLowerCase();
+const text=document.getElementById("assetSearch").value.toUpperCase();
 const dropdown=document.getElementById("dropdown");
 dropdown.innerHTML="";
 if(text===""){dropdown.style.display="none";return;}
-const filtered=currentAssets.filter(a=>a.toLowerCase().includes(text));
-filtered.forEach(a=>{
+otcAssets.filter(a=>a.includes(text)).forEach(a=>{
 let div=document.createElement("div");
 div.textContent=a;
 div.onclick=function(){
@@ -264,36 +283,17 @@ el.classList.add("active");
 
 function generateSignals(){
 if(!selectedAsset){alert("Select an asset first");return;}
-
 const direction=document.getElementById("direction").value;
 const count=parseInt(document.getElementById("count").value);
-const start=document.getElementById("start").value;
-const end=document.getElementById("end").value;
-
 let box=document.getElementById("signals");
 box.innerHTML="";
 lastSignals=[];
-
-let [sh,sm]=start.split(":").map(Number);
-let [eh,em]=end.split(":").map(Number);
-let startMin=sh*60+sm;
-let endMin=eh*60+em;
-if(endMin<=startMin){alert("End Time must be greater");return;}
-
-let gap=(endMin-startMin)/count;
-
 for(let i=1;i<=count;i++){
-let current=Math.floor(startMin+(gap*i));
-let h=Math.floor(current/60);
-let m=current%60;
+let h=Math.floor(Math.random()*23);
+let m=Math.floor(Math.random()*59);
 let timeStr=(h<10?"0"+h:h)+":"+(m<10?"0"+m:m);
-
 let cleanAsset=selectedAsset.replace("(OTC)","-OTC").replace("/","");
-let finalDir;
-if(direction==="CALL") finalDir="BUY";
-else if(direction==="PUT") finalDir="PUT";
-else finalDir=Math.random()>0.5?"BUY":"PUT";
-
+let finalDir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
 let signalText=`${timeStr}:${cleanAsset}:${finalDir}`;
 lastSignals.push(signalText);
 box.innerHTML+=`<div>${signalText}</div>`;
@@ -307,14 +307,12 @@ alert("Signals Copied!");
 
 function copyTelegram(){
 if(lastSignals.length===0){alert("Generate signals first!");return;}
-let msg="🔥 AI MONEY SIGNALS 🔥\n\n";
-lastSignals.forEach((s,i)=>{msg+=`#${i+1} ${s}\n`;});
-msg+="\n⚡ Powered by AI Signals";
+let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n➡️ MTG +1\n\n┏━━━❰⭐️Ai EXTREME⭐️❱━━━┓\n\n";
+lastSignals.forEach(s=>{msg+=s+"\n";});
+msg+="\n┗━━━❰⭐️Ai EXTREME⭐️❱━━━┛\n\n⚠️TRY TO TAKE SAFETY\nMARGIN FOR BETTER ENTRY\nDON'T GO AGAINST MOMENTUM\nAND AVOID LOWER % MARKETS\nBELOW 78%‼️";
 navigator.clipboard.writeText(msg);
-alert("Telegram Format Copied!");
+alert("Full Telegram Format Copied!");
 }
-
-window.onload=updateAssets;
 </script>
 </body>
 </html>
