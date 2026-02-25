@@ -4,165 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Money Signals Pro</title>
-
 <style>
-body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background: radial-gradient(circle at top,#0f1b2e,#050b16);
-    color:white;
-}
-.container{
-    max-width:520px;
-    margin:auto;
-    padding:20px;
-}
-.logo{
-    text-align:center;
-    margin-top:15px;
-}
-.logo h2{
-    font-weight:700;
-    letter-spacing:1px;
-    background:linear-gradient(90deg,#00ffc8,#00a2ff);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-.badge{
-    display:inline-block;
-    padding:6px 16px;
-    border-radius:30px;
-    background:rgba(0,255,200,0.08);
-    color:#00ffc8;
-    font-size:11px;
-    border:1px solid rgba(0,255,200,0.2);
-}
-.card{
-    background:rgba(17,26,46,0.75);
-    backdrop-filter:blur(18px);
-    border-radius:20px;
-    padding:22px;
-    margin-top:18px;
-    box-shadow:0 0 40px rgba(0,255,200,0.08);
-}
-label{
-    font-size:12px;
-    color:#8fa3c7;
-    display:block;
-    margin-top:15px;
-}
-select,input{
-    width:100%;
-    padding:13px;
-    border-radius:14px;
-    border:1px solid rgba(255,255,255,0.05);
-    background:#0c1628;
-    color:white;
-    font-size:13px;
-    margin-top:6px;
-}
-.timeframe{
-    display:flex;
-    gap:8px;
-    margin-top:8px;
-}
-.tf-btn{
-    flex:1;
-    padding:10px;
-    border-radius:12px;
-    border:1px solid rgba(255,255,255,0.08);
-    background:#0c1628;
-    color:white;
-    cursor:pointer;
-}
-.tf-btn.active{
-    background:linear-gradient(90deg,#00ffc8,#00a2ff);
-    color:black;
-    font-weight:bold;
-}
-.generate-btn{
-    width:100%;
-    padding:16px;
-    margin-top:20px;
-    border:none;
-    border-radius:16px;
-    background:linear-gradient(90deg,#00ffc8,#00a2ff);
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-.signal-box{
-    margin-top:20px;
-    background:#061021;
-    border-radius:15px;
-    padding:15px;
-    max-height:260px;
-    overflow:auto;
-    font-family:'Courier New',monospace;
-    font-size:13px;
-}
-.btn{
-    width:100%;
-    padding:13px;
-    margin-top:12px;
-    border:none;
-    border-radius:14px;
-    background:#111f38;
-    color:white;
-    cursor:pointer;
-    font-weight:bold;
-}
-.telegram{
-    background:linear-gradient(90deg,#229ED9,#0088cc);
-}
+body{margin:0;font-family:'Segoe UI',sans-serif;background:radial-gradient(circle at top,#0f1b2e,#050b16);color:white;}
+.container{max-width:520px;margin:auto;padding:20px;}
+.logo{text-align:center;margin-top:15px;}
+.logo h2{font-weight:700;letter-spacing:1px;background:linear-gradient(90deg,#00ffc8,#00a2ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.badge{display:inline-block;padding:6px 16px;border-radius:30px;background:rgba(0,255,200,0.08);color:#00ffc8;font-size:11px;border:1px solid rgba(0,255,200,0.2);}
+.card{background:rgba(17,26,46,0.75);backdrop-filter:blur(18px);border-radius:20px;padding:22px;margin-top:18px;box-shadow:0 0 40px rgba(0,255,200,0.08);}
+label{font-size:12px;color:#8fa3c7;display:block;margin-top:15px;}
+select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,0.05);background:#0c1628;color:white;font-size:13px;margin-top:6px;}
+.timeframe{display:flex;gap:8px;margin-top:8px;}
+.tf-btn{flex:1;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:#0c1628;color:white;cursor:pointer;}
+.tf-btn.active{background:linear-gradient(90deg,#00ffc8,#00a2ff);color:black;font-weight:bold;}
+.generate-btn{width:100%;padding:16px;margin-top:20px;border:none;border-radius:16px;background:linear-gradient(90deg,#00ffc8,#00a2ff);font-size:16px;font-weight:bold;cursor:pointer;}
+.signal-box{margin-top:20px;background:#061021;border-radius:15px;padding:15px;max-height:260px;overflow:auto;font-family:'Courier New',monospace;font-size:13px;}
+.btn{width:100%;padding:13px;margin-top:12px;border:none;border-radius:14px;background:#111f38;color:white;cursor:pointer;font-weight:bold;}
+.telegram{background:linear-gradient(90deg,#229ED9,#0088cc);}
 .search-wrapper{position:relative;}
-.dropdown{
-    position:absolute;
-    width:100%;
-    background:#0c1628;
-    border-radius:12px;
-    margin-top:5px;
-    max-height:200px;
-    overflow:auto;
-    border:1px solid rgba(255,255,255,0.05);
-    display:none;
-    z-index:99;
-}
-.dropdown div{
-    padding:10px;
-    cursor:pointer;
-}
+.dropdown{position:absolute;width:100%;background:#0c1628;border-radius:12px;margin-top:5px;max-height:200px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:none;z-index:99;}
+.dropdown div{padding:10px;cursor:pointer;}
 .dropdown div:hover{background:#16233d;}
-
-/* Access Modal */
-.modal{
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    background:rgba(0,0,0,0.7);
-    display:none;
-    justify-content:center;
-    align-items:center;
-}
-.modal-box{
-    background:#0c1628;
-    padding:25px;
-    border-radius:18px;
-    width:90%;
-    max-width:350px;
-    text-align:center;
-}
-.modal-box h3{
-    margin-top:0;
-}
-.access-footer{
-    margin-top:15px;
-    font-size:12px;
-    color:#8fa3c7;
-}
+.modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;}
+.modal-box{background:#0c1628;padding:25px;border-radius:18px;width:90%;max-width:350px;text-align:center;}
+.modal-box h3{margin-top:0;}
+.access-footer{margin-top:15px;font-size:12px;color:#8fa3c7;}
+.access-footer a{color:#00ffc8;text-decoration:none;font-weight:bold;}
+.access-footer a:hover{text-decoration:underline;}
 </style>
 </head>
-
 <body>
 <div class="container">
 <div class="logo">
@@ -171,7 +40,6 @@ select,input{
 </div>
 
 <div class="card">
-
 <label>Market</label>
 <select id="market" onchange="updateAssets()">
 <option value="REAL">Real Market</option>
@@ -202,20 +70,15 @@ select,input{
 
 <label>Number of Signals</label>
 <input type="number" id="count" min="1" max="200" value="5">
-
 <label>Start Time</label>
 <input type="time" id="start" value="14:00">
-
 <label>End Time</label>
 <input type="time" id="end" value="21:00">
-
 <button class="generate-btn" onclick="openAccess()">Generate AI Signals</button>
 
 <div class="signal-box" id="signals"></div>
-
 <button class="btn" onclick="copySignals()">📋 Copy All Signals</button>
 <button class="btn telegram" onclick="copyTelegram()">📱 Copy for Telegram</button>
-
 </div>
 </div>
 
@@ -226,7 +89,7 @@ select,input{
 <input type="password" id="accessInput" placeholder="Enter Access Code">
 <button class="generate-btn" onclick="checkAccess()">Unlock</button>
 <div class="access-footer">
-Access Required? Contact: <strong>@CryptoParvej</strong>
+Access Required? Contact: <a href="https://t.me/TraderParvej" target="_blank">@TraderParvej</a>
 </div>
 </div>
 </div>
@@ -235,115 +98,86 @@ Access Required? Contact: <strong>@CryptoParvej</strong>
 const ACCESS_CODE="125800";
 let accessGranted=false;
 
-/* Access Modal Functions */
-function openAccess(){
-document.getElementById("accessModal").style.display="flex";
-}
+function openAccess(){document.getElementById("accessModal").style.display="flex";}
 function checkAccess(){
 let code=document.getElementById("accessInput").value;
 if(code===ACCESS_CODE){
 accessGranted=true;
 document.getElementById("accessModal").style.display="none";
 generateSignals();
-}else{
-alert("Invalid Access Code");
-}
+}else{alert("Invalid Access Code");}
 }
 
-/* ================================
-   FULL ASSET SYSTEM (Real + OTC + Crypto)
-================================ */
-const realAssets = ["EUR/USD","GBP/USD","USD/JPY","AUD/JPY","EUR/JPY","GBP/JPY","USD/CAD","AUD/CAD","EUR/GBP","USD/CHF"];
-const otcAssets = ["USD/ARS(OTC)","USD/BDT(OTC)","USD/EGP(OTC)","USD/INR(OTC)","USD/IDR(OTC)","USD/MXN(OTC)","EUR/AUD(OTC)","EUR/CHF(OTC)","EUR/SGD(OTC)","GBP/CHF(OTC)","NZD/CAD(OTC)","AUD/NZD(OTC)","CAD/CHF(OTC)","EUR/NZD(OTC)","USD/PHP(OTC)","GBP/NZD(OTC)","USD/BRL(OTC)","USD/ZAR(OTC)","EUR/CAD(OTC)","AUD/CHF(OTC)","CHF/JPY(OTC)","NZD/CHF(OTC)","USD/COP(OTC)","USD/DZD(OTC)","USD/NGN(OTC)","USD/TRY(OTC)","USD/PKR(OTC)","NZD/JPY(OTC)","NZD/USD(OTC)"];
-const cryptoAssets = ["Bitcoin (OTC)","Axie Infinity (OTC)","Polkadot (OTC)","Ethereum Classic (OTC)","Ethereum (OTC)","Floki (OTC)","Gala (OTC)","Hamster Kombat (OTC)","Chainlink (OTC)","Litecoin (OTC)","Melania Meme (OTC)","Pepe (OTC)","Shiba Inu (OTC)","Solana (OTC)","Toncoin (OTC)","Trump (OTC)","Dogwifhat (OTC)","Zcash (OTC)","TRON (OTC)","Bonk (OTC)","Ripple (OTC)","Cardano (OTC)","Avalanche (OTC)","Arbitrum (OTC)","Cosmos (OTC)","Bitcoin Cash (OTC)","Decentraland (OTC)","Beam (OTC)","Dogecoin (OTC)","Dash (OTC)","Aptos (OTC)","Binance Coin (OTC)","Celestia (OTC)"];
+/* Asset System */
+const realAssets=["EUR/USD","GBP/USD","USD/JPY","AUD/JPY","EUR/JPY","GBP/JPY","USD/CAD","AUD/CAD","EUR/GBP","USD/CHF"];
+const otcAssets=["USD/ARS(OTC)","USD/BDT(OTC)","USD/EGP(OTC)","USD/INR(OTC)","USD/IDR(OTC)","USD/MXN(OTC)","EUR/AUD(OTC)","EUR/CHF(OTC)","EUR/SGD(OTC)","GBP/CHF(OTC)","NZD/CAD(OTC)","AUD/NZD(OTC)","CAD/CHF(OTC)","EUR/NZD(OTC)","USD/PHP(OTC)","GBP/NZD(OTC)","USD/BRL(OTC)","USD/ZAR(OTC)","EUR/CAD(OTC)","AUD/CHF(OTC)","CHF/JPY(OTC)","NZD/CHF(OTC)","USD/COP(OTC)","USD/DZD(OTC)","USD/NGN(OTC)","USD/TRY(OTC)","USD/PKR(OTC)","NZD/JPY(OTC)","NZD/USD(OTC)"];
+const cryptoAssets=["Bitcoin (OTC)","Axie Infinity (OTC)","Polkadot (OTC)","Ethereum Classic (OTC)","Ethereum (OTC)","Floki (OTC)","Gala (OTC)","Hamster Kombat (OTC)","Chainlink (OTC)","Litecoin (OTC)","Melania Meme (OTC)","Pepe (OTC)","Shiba Inu (OTC)","Solana (OTC)","Toncoin (OTC)","Trump (OTC)","Dogwifhat (OTC)","Zcash (OTC)","TRON (OTC)","Bonk (OTC)","Ripple (OTC)","Cardano (OTC)","Avalanche (OTC)","Arbitrum (OTC)","Cosmos (OTC)","Bitcoin Cash (OTC)","Decentraland (OTC)","Beam (OTC)","Dogecoin (OTC)","Dash (OTC)","Aptos (OTC)","Binance Coin (OTC)","Celestia (OTC)"];
 
-let currentAssets=[]; 
-
+let currentAssets=[];
 let selectedAsset="";
 let timeframe="M1";
 let lastSignals=[];
 
-/* Load assets according to market */
 function updateAssets(){
 const market=document.getElementById("market").value;
-if(market==="REAL") currentAssets=[...realAssets];
-if(market==="OTC") currentAssets=[...otcAssets];
-if(market==="CRYPTO") currentAssets=[...cryptoAssets];
-
+currentAssets=market==="REAL"?[...realAssets]:market==="OTC"?[...otcAssets]:[...cryptoAssets];
 document.getElementById("assetSearch").value="";
 selectedAsset="";
 document.getElementById("dropdown").innerHTML="";
 document.getElementById("dropdown").style.display="none";
 }
+updateAssets();
 
-updateAssets(); // initial load
-
-/* Search & Dropdown */
 function filterAssets(){
 const text=document.getElementById("assetSearch").value.toUpperCase();
 const dropdown=document.getElementById("dropdown");
 dropdown.innerHTML="";
-if(text===""){dropdown.style.display="none"; return;}
-let filtered=currentAssets.filter(a=>a.toUpperCase().includes(text));
-if(filtered.length===0){dropdown.style.display="none"; return;}
-filtered.forEach(a=>{
+if(text===""){dropdown.style.display="none";return;}
+currentAssets.filter(a=>a.toUpperCase().includes(text)).forEach(a=>{
 let div=document.createElement("div");
 div.textContent=a;
-div.onclick=function(){
-selectedAsset=a;
-document.getElementById("assetSearch").value=a;
-dropdown.style.display="none";
-};
+div.onclick=function(){selectedAsset=a;document.getElementById("assetSearch").value=a;dropdown.style.display="none";}
 dropdown.appendChild(div);
 });
-dropdown.style.display="block";
+if(dropdown.childElementCount>0){dropdown.style.display="block";}else{dropdown.style.display="none";}
 }
 
-/* Timeframe buttons */
-function setTF(tf,el){
-timeframe=tf;
-document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
-el.classList.add("active");
-}
+function setTF(tf,el){timeframe=tf;document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));el.classList.add("active");}
 
-/* Generate Signals */
 function generateSignals(){
-if(!selectedAsset){alert("Select an asset first"); return;}
+if(!selectedAsset){alert("Select an asset first");return;}
 const direction=document.getElementById("direction").value;
 const count=parseInt(document.getElementById("count").value);
+const startTime=document.getElementById("start").value;
+const endTime=document.getElementById("end").value;
+let [sh,sm]=startTime.split(":").map(Number);
+let [eh,em]=endTime.split(":").map(Number);
+let startMin=sh*60+sm;
+let endMin=eh*60+em;
+if(endMin<=startMin){alert("End Time must be greater than Start Time");return;}
+let gap=Math.floor((endMin-startMin)/count);
 let box=document.getElementById("signals");
 box.innerHTML="";
 lastSignals=[];
-for(let i=1;i<=count;i++){
-let now=new Date();
-now.setMinutes(now.getMinutes()+i*2);
-let h=now.getHours().toString().padStart(2,'0');
-let m=now.getMinutes().toString().padStart(2,'0');
-let cleanAsset=selectedAsset.replace("(OTC)","-OTC").replace("/","");
-let finalDir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
-let signalText=`${h}:${m}:${cleanAsset}:${finalDir}`;
+for(let i=0;i<count;i++){
+let current=startMin+gap*i;
+let h=Math.floor(current/60).toString().padStart(2,'0');
+let m=(current%60).toString().padStart(2,'0');
+let assetFormatted=selectedAsset.replace("(OTC)","-OTC").replace("/","");
+let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
+let signalText=`${h}:${m}:${assetFormatted}:${dir}`;
 lastSignals.push(signalText);
 box.innerHTML+=`<div>${signalText}</div>`;
 }
 }
 
-/* Copy normal */
-function copySignals(){
-if(lastSignals.length===0){alert("Generate signals first!"); return;}
-navigator.clipboard.writeText(lastSignals.join("\n"));
-alert("Signals Copied!");
-}
+function copySignals(){if(lastSignals.length===0){alert("Generate signals first!");return;}navigator.clipboard.writeText(lastSignals.join("\n"));alert("Signals Copied!");}
 
-/* Telegram format */
 function copyTelegram(){
-if(lastSignals.length===0){alert("Generate signals first!"); return;}
-let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n";
-msg+="🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n";
-msg+="➡️ MTG +1\n\n";
-msg+="┏━━━❰⭐️Ai EXTREME⭐️❱━━━┓\n\n";
+if(lastSignals.length===0){alert("Generate signals first!");return;}
+let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n➡️ MTG +1\n\n┏━━━❰⭐️Ai EXTREME⭐️❱━━━┓\n\n";
 lastSignals.forEach(s=>{msg+=s+"\n";});
-msg+="\n┗━━━❰⭐️Ai EXTREME⭐️❱━━━┛\n\n";
-msg+="⚠️TRY TO TAKE SAFETY\nMARGIN FOR BETTER ENTRY\nDON'T GO AGAINST MOMENTUM\nAND AVOID LOWER % MARKETS\nBELOW 78%‼️";
+msg+="\n┗━━━❰⭐️Ai EXTREME⭐️❱━━━┛\n\n⚠️TRY TO TAKE SAFETY\nMARGIN FOR BETTER ENTRY\nDON'T GO AGAINST MOMENTUM\nAND AVOID LOWER % MARKETS\nBELOW 78%‼️";
 navigator.clipboard.writeText(msg);
 alert("Full Telegram Format Copied!");
 }
