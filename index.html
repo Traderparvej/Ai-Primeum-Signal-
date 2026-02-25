@@ -142,25 +142,48 @@ dropdown.appendChild(div);
 if(dropdown.childElementCount>0){dropdown.style.display="block";}else{dropdown.style.display="none";}
 }
 
-function setTF(tf,el){timeframe=tf;document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));el.classList.add("active");}
+function setTF(tf,el){
+timeframe=tf;
+document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
+el.classList.add("active");
+}
 
+/* 🔥 UPDATED: FULL RANDOM UNIQUE TIME GAP SYSTEM (NO FIXED GAP, NO SAME GAP) */
 function generateSignals(){
 if(!selectedAsset){alert("Select an asset first");return;}
+
 const direction=document.getElementById("direction").value;
 const count=parseInt(document.getElementById("count").value);
 const startTime=document.getElementById("start").value;
 const endTime=document.getElementById("end").value;
+
 let [sh,sm]=startTime.split(":").map(Number);
 let [eh,em]=endTime.split(":").map(Number);
+
 let startMin=sh*60+sm;
 let endMin=eh*60+em;
+
 if(endMin<=startMin){alert("End Time must be greater than Start Time");return;}
-let gap=Math.floor((endMin-startMin)/count);
+if((endMin-startMin)<count){alert("Time range too small for this many signals");return;}
+
+let usedTimes=new Set();
+let attempts=0;
+
+// Generate completely random unique minutes inside range
+while(usedTimes.size<count && attempts<10000){
+let randMin=Math.floor(Math.random()*(endMin-startMin-1))+startMin+1;
+usedTimes.add(randMin);
+attempts++;
+}
+
+// Convert to sorted array (chronological signals)
+let timeArray=Array.from(usedTimes).sort((a,b)=>a-b);
+
 let box=document.getElementById("signals");
 box.innerHTML="";
 lastSignals=[];
-for(let i=0;i<count;i++){
-let current=startMin+gap*i;
+
+timeArray.forEach(current=>{
 let h=Math.floor(current/60).toString().padStart(2,'0');
 let m=(current%60).toString().padStart(2,'0');
 let assetFormatted=selectedAsset.replace("(OTC)","-OTC").replace("/","");
@@ -168,10 +191,14 @@ let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY"
 let signalText=`${h}:${m}:${assetFormatted}:${dir}`;
 lastSignals.push(signalText);
 box.innerHTML+=`<div>${signalText}</div>`;
-}
+});
 }
 
-function copySignals(){if(lastSignals.length===0){alert("Generate signals first!");return;}navigator.clipboard.writeText(lastSignals.join("\n"));alert("Signals Copied!");}
+function copySignals(){
+if(lastSignals.length===0){alert("Generate signals first!");return;}
+navigator.clipboard.writeText(lastSignals.join("\n"));
+alert("Signals Copied!");
+}
 
 function copyTelegram(){
 if(lastSignals.length===0){alert("Generate signals first!");return;}
