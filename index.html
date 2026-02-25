@@ -1,318 +1,195 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Money Signals Pro</title>
+<title>AI Extreme Signal Generator</title>
 
 <style>
 body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background: radial-gradient(circle at top,#0f1b2e,#050b16);
-    color:white;
+background:#0f172a;
+color:#fff;
+font-family:Segoe UI;
+text-align:center;
+padding:20px;
 }
-.container{
-    max-width:520px;
-    margin:auto;
-    padding:20px;
-}
-.logo{
-    text-align:center;
-    margin-top:15px;
-}
-.logo h2{
-    font-weight:700;
-    letter-spacing:1px;
-    background:linear-gradient(90deg,#00ffc8,#00a2ff);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-.badge{
-    display:inline-block;
-    padding:6px 16px;
-    border-radius:30px;
-    background:rgba(0,255,200,0.08);
-    color:#00ffc8;
-    font-size:11px;
-    border:1px solid rgba(0,255,200,0.2);
-}
-.card{
-    background:rgba(17,26,46,0.75);
-    backdrop-filter:blur(18px);
-    border-radius:20px;
-    padding:22px;
-    margin-top:18px;
-    box-shadow:0 0 40px rgba(0,255,200,0.08);
-}
-label{
-    font-size:12px;
-    color:#8fa3c7;
-    display:block;
-    margin-top:15px;
-}
-select,input{
-    width:100%;
-    padding:13px;
-    border-radius:14px;
-    border:1px solid rgba(255,255,255,0.05);
-    background:#0c1628;
-    color:white;
-    font-size:13px;
-    margin-top:6px;
-}
-.timeframe{
-    display:flex;
-    gap:8px;
-    margin-top:8px;
-}
-.tf-btn{
-    flex:1;
-    padding:10px;
-    border-radius:12px;
-    border:1px solid rgba(255,255,255,0.08);
-    background:#0c1628;
-    color:white;
-    cursor:pointer;
-}
-.tf-btn.active{
-    background:linear-gradient(90deg,#00ffc8,#00a2ff);
-    color:black;
-    font-weight:bold;
-}
-.generate-btn{
-    width:100%;
-    padding:16px;
-    margin-top:20px;
-    border:none;
-    border-radius:16px;
-    background:linear-gradient(90deg,#00ffc8,#00a2ff);
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-}
-.signal-box{
-    margin-top:20px;
-    background:#061021;
-    border-radius:15px;
-    padding:15px;
-    max-height:260px;
-    overflow:auto;
-    font-family:'Courier New',monospace;
-    font-size:13px;
-}
-.btn{
-    width:100%;
-    padding:13px;
-    margin-top:12px;
-    border:none;
-    border-radius:14px;
-    background:#111f38;
-    color:white;
-    cursor:pointer;
-    font-weight:bold;
-}
-.telegram{
-    background:linear-gradient(90deg,#229ED9,#0088cc);
-}
-.search-wrapper{position:relative;}
-.dropdown{
-    position:absolute;
-    width:100%;
-    background:#0c1628;
-    border-radius:12px;
-    margin-top:5px;
-    max-height:160px;
-    overflow:auto;
-    border:1px solid rgba(255,255,255,0.05);
-    display:none;
-    z-index:99;
-}
-.dropdown div{
-    padding:10px;
-    cursor:pointer;
-}
-.dropdown div:hover{background:#16233d;}
 
-/* Access Modal */
-.modal{
-    position:fixed;
-    top:0;left:0;
-    width:100%;height:100%;
-    background:rgba(0,0,0,0.7);
-    display:none;
-    justify-content:center;
-    align-items:center;
+.container{
+max-width:500px;
+margin:auto;
+background:#1e293b;
+padding:20px;
+border-radius:12px;
+box-shadow:0 0 20px #000;
 }
-.modal-box{
-    background:#0c1628;
-    padding:25px;
-    border-radius:18px;
-    width:90%;
-    max-width:350px;
-    text-align:center;
+
+h2{
+margin-bottom:10px;
 }
-.modal-box h3{
-    margin-top:0;
+
+select,input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:6px;
+border:none;
+font-size:14px;
 }
-.access-footer{
-    margin-top:15px;
-    font-size:12px;
-    color:#8fa3c7;
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:#fff;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+background:#1d4ed8;
+}
+
+.output{
+margin-top:15px;
+background:#0f172a;
+padding:15px;
+border-radius:8px;
+font-family:monospace;
+font-size:13px;
+white-space:pre-line;
+}
+
+.note{
+margin-top:10px;
+font-size:12px;
+color:#94a3b8;
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
-<div class="logo">
-<h2>Money Signals AI</h2>
-<div class="badge">PRO TRADING INTELLIGENCE</div>
-</div>
 
-<div class="card">
+<h2>⭐ AI EXTREME SIGNAL</h2>
 
-<label>Market</label>
-<select id="market" onchange="updateAssets()">
-<option value="REAL">Real Market</option>
-<option value="OTC">OTC Market</option>
-<option value="CRYPTO">Crypto OTC</option>
+<input type="text" id="search" placeholder="Search Asset">
+
+<select id="assetSelect" size="6">
+<option value="USDBDT-OTC">USDBDT-OTC</option>
+<option value="HMSUSD-OTC">HMSUSD-OTC</option>
+<option value="USDNGN-OTC">USDNGN-OTC</option>
+<option value="EURUSD">EURUSD</option>
+<option value="GBPUSD">GBPUSD</option>
+<option value="BTCUSD">BTCUSD</option>
+<option value="ETHUSD">ETHUSD</option>
+<option value="USDMXN-OTC">USDMXN-OTC</option>
+<option value="NZDCAD-OTC">NZDCAD-OTC</option>
+<option value="USDTRY-OTC">USDTRY-OTC</option>
 </select>
 
-<label>🔍 Search Asset</label>
-<div class="search-wrapper">
-<input type="text" id="assetSearch" placeholder="Search and select asset..." onkeyup="filterAssets()">
-<div class="dropdown" id="dropdown"></div>
+<button onclick="generateSignal()">Generate AI Signal</button>
+
+<button onclick="copyTelegram()">Copy for Telegram</button>
+
+<div class="output" id="outputBox"></div>
+
+<div class="note">
+Access Code Required: 125800 <br>
+Need Access? Contact: <b>CryptoParvej</b>
 </div>
 
-<label>Direction</label>
-<select id="direction">
-<option value="BOTH">Call & Put (Auto)</option>
-<option value="CALL">Call Only</option>
-<option value="PUT">Put Only</option>
-</select>
-
-<label>Timeframe</label>
-<div class="timeframe">
-<button class="tf-btn active" onclick="setTF('M1',this)">M1</button>
-<button class="tf-btn" onclick="setTF('M5',this)">M5</button>
-<button class="tf-btn" onclick="setTF('M15',this)">M15</button>
-<button class="tf-btn" onclick="setTF('M30',this)">M30</button>
-</div>
-
-<label>Number of Signals</label>
-<input type="number" id="count" min="1" max="200" value="5">
-
-<label>Start Time</label>
-<input type="time" id="start" value="14:00">
-
-<label>End Time</label>
-<input type="time" id="end" value="21:00">
-
-<button class="generate-btn" onclick="openAccess()">Generate AI Signals</button>
-
-<div class="signal-box" id="signals"></div>
-
-<button class="btn" onclick="copySignals()">📋 Copy All Signals</button>
-<button class="btn telegram" onclick="copyTelegram()">📱 Copy for Telegram</button>
-
-</div>
-</div>
-
-<!-- Access Modal -->
-<div class="modal" id="accessModal">
-<div class="modal-box">
-<h3>🔐 Premium Access Required</h3>
-<input type="password" id="accessInput" placeholder="Enter Access Code">
-<button class="generate-btn" onclick="checkAccess()">Unlock</button>
-<div class="access-footer">
-Access Required? Contact: <strong>@CryptoParvej</strong>
-</div>
-</div>
 </div>
 
 <script>
-const ACCESS_CODE="125800";
-let accessGranted=false;
 
-function openAccess(){
-document.getElementById("accessModal").style.display="flex";
+let lastSignals = [];
+
+// SEARCH FILTER
+document.getElementById("search").addEventListener("keyup", function(){
+let filter = this.value.toUpperCase();
+let options = document.getElementById("assetSelect").options;
+
+for(let i=0;i<options.length;i++){
+let txt = options[i].text.toUpperCase();
+options[i].style.display = txt.includes(filter) ? "" : "none";
 }
-
-function checkAccess(){
-let code=document.getElementById("accessInput").value;
-if(code===ACCESS_CODE){
-accessGranted=true;
-document.getElementById("accessModal").style.display="none";
-generateSignals();
-}else{
-alert("Invalid Access Code");
-}
-}
-
-const otcAssets=["USD/BDT(OTC)","USD/NGN(OTC)","USD/TRY(OTC)"];
-let selectedAsset="";
-let timeframe="M1";
-let lastSignals=[];
-
-function updateAssets(){}
-
-function filterAssets(){
-const text=document.getElementById("assetSearch").value.toUpperCase();
-const dropdown=document.getElementById("dropdown");
-dropdown.innerHTML="";
-if(text===""){dropdown.style.display="none";return;}
-otcAssets.filter(a=>a.includes(text)).forEach(a=>{
-let div=document.createElement("div");
-div.textContent=a;
-div.onclick=function(){
-selectedAsset=a;
-document.getElementById("assetSearch").value=a;
-dropdown.style.display="none";
-};
-dropdown.appendChild(div);
 });
-dropdown.style.display="block";
+
+function generateSignal(){
+
+let code = prompt("Enter Access Code:");
+if(code !== "125800"){
+alert("Invalid Access Code!");
+return;
 }
 
-function setTF(tf,el){
-timeframe=tf;
-document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
-el.classList.add("active");
+let select = document.getElementById("assetSelect");
+if(select.selectedIndex === -1){
+alert("Select an asset first!");
+return;
 }
 
-function generateSignals(){
-if(!selectedAsset){alert("Select an asset first");return;}
-const direction=document.getElementById("direction").value;
-const count=parseInt(document.getElementById("count").value);
-let box=document.getElementById("signals");
-box.innerHTML="";
-lastSignals=[];
-for(let i=1;i<=count;i++){
-let h=Math.floor(Math.random()*23);
-let m=Math.floor(Math.random()*59);
-let timeStr=(h<10?"0"+h:h)+":"+(m<10?"0"+m:m);
-let cleanAsset=selectedAsset.replace("(OTC)","-OTC").replace("/","");
-let finalDir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
-let signalText=`${timeStr}:${cleanAsset}:${finalDir}`;
-lastSignals.push(signalText);
-box.innerHTML+=`<div>${signalText}</div>`;
-}
+let asset = select.value;
+let direction = Math.random()>0.5 ? "BUY" : "PUT";
+
+let now = new Date();
+let hour = now.getHours().toString().padStart(2,'0');
+let min = (now.getMinutes()+1).toString().padStart(2,'0');
+
+let signal = `${hour}:${min}:${asset}:${direction}`;
+
+lastSignals.push(signal);
+
+document.getElementById("outputBox").innerText = lastSignals.join("\n");
 }
 
-function copySignals(){
-navigator.clipboard.writeText(lastSignals.join("\n"));
-alert("Signals Copied!");
-}
-
+// TELEGRAM COPY
 function copyTelegram(){
-if(lastSignals.length===0){alert("Generate signals first!");return;}
-let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n➡️ MTG +1\n\n┏━━━❰⭐️Ai EXTREME⭐️❱━━━┓\n\n";
-lastSignals.forEach(s=>{msg+=s+"\n";});
-msg+="\n┗━━━❰⭐️Ai EXTREME⭐️❱━━━┛\n\n⚠️TRY TO TAKE SAFETY\nMARGIN FOR BETTER ENTRY\nDON'T GO AGAINST MOMENTUM\nAND AVOID LOWER % MARKETS\nBELOW 78%‼️";
-navigator.clipboard.writeText(msg);
-alert("Full Telegram Format Copied!");
+
+if(lastSignals.length===0){
+alert("Generate signals first!");
+return;
 }
+
+let now = new Date();
+let day = ("0" + now.getDate()).slice(-2);
+let month = ("0" + (now.getMonth()+1)).slice(-2);
+let year = now.getFullYear();
+
+function fancy(text){
+const normal="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ:-";
+const fancy ="𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉:-";
+return text.split("").map(c=>{
+let i=normal.indexOf(c);
+return i>=0?fancy[i]:c;
+}).join("");
+}
+
+let msg="";
+msg+="🌐 TIMEZONE :UTC+06:00 🇧🇩\n";
+msg+=`🗓 DATE-${day}.${month}.${year}\n`;
+msg+="➡️ MTG +1\n\n";
+msg+="┏━━━❰⭐️Ai EXTREME⭐️❱━━━┓\n\n";
+
+lastSignals.forEach(s=>{
+msg+=fancy(s.toUpperCase())+"\n";
+});
+
+msg+="\n┗━━━❰⭐️Ai EXTREME⭐️❱━━━┛\n\n";
+msg+="⚠️TRY TO TAKE SAFETY\n";
+msg+="MARGIN FOR BETTER ENTRY\n";
+msg+="DON'T GO AGAINST MOMENTUM\n";
+msg+="AND AVOID LOWER % MARKETS\n";
+msg+="BELOW 78%‼️";
+
+navigator.clipboard.writeText(msg);
+alert("Telegram Format Copied!");
+}
+
 </script>
+
 </body>
 </html>
