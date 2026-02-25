@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AI Premium Signal Generator</title>
+
+<style>
+body{
+    background:#0f172a;
+    font-family:Arial, sans-serif;
+    color:white;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1000px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    color:#00f5ff;
+}
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+    box-shadow:0 0 20px rgba(0,255,255,0.1);
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+}
+
+button{
+    padding:12px 20px;
+    margin-top:20px;
+    border:none;
+    border-radius:10px;
+    background:#00f5ff;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.8;
+}
+
+.asset-box{
+    background:#0f172a;
+    padding:10px;
+    border-radius:10px;
+    max-height:200px;
+    overflow-y:auto;
+    margin-top:10px;
+}
+
+.asset-box label{
+    display:flex;
+    align-items:center;
+    margin:5px 0;
+    cursor:pointer;
+}
+
+.signal-output{
+    background:#0f172a;
+    padding:15px;
+    border-radius:10px;
+    margin-top:20px;
+    font-size:15px;
+    line-height:1.6;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🚀 AI Premium Signal Generator</h1>
+
+<div class="card">
+
+<label>🔍 Search Asset</label>
+<input type="text" id="search" onkeyup="filterAssets()" placeholder="Search pair...">
+
+<label>🎯 Select Assets (Max 5)</label>
+<div class="asset-box" id="assetList">
+
+<label><input type="checkbox" value="EUR/USD"> EUR/USD</label>
+<label><input type="checkbox" value="GBP/USD"> GBP/USD</label>
+<label><input type="checkbox" value="USD/JPY"> USD/JPY</label>
+<label><input type="checkbox" value="USD/CHF"> USD/CHF</label>
+<label><input type="checkbox" value="AUD/USD"> AUD/USD</label>
+<label><input type="checkbox" value="AUD/JPY"> AUD/JPY</label>
+<label><input type="checkbox" value="USD/CAD"> USD/CAD</label>
+<label><input type="checkbox" value="EUR/GBP"> EUR/GBP</label>
+<label><input type="checkbox" value="GBP/JPY"> GBP/JPY</label>
+<label><input type="checkbox" value="NZD/USD (OTC)"> NZD/USD (OTC)</label>
+
+</div>
+
+<label>⏰ Start Time</label>
+<input type="time" id="startTime">
+
+<label>⏰ End Time</label>
+<input type="time" id="endTime">
+
+<label>🔢 Number of Signals</label>
+<input type="number" id="signalCount" min="1" max="50" value="5">
+
+<label>🎯 Accuracy (%)</label>
+<select id="accuracy">
+<option>70%</option>
+<option>75%</option>
+<option>80%</option>
+<option>85%</option>
+<option>90%</option>
+<option>95%</option>
+</select>
+
+<button onclick="generateSignals()">⚡ Generate Signals</button>
+<button onclick="copySignals()">📱 Copy for Telegram</button>
+
+</div>
+
+<div class="signal-output" id="output">
+Signals will appear here...
+</div>
+
+</div>
+
+<script>
+
+function filterAssets(){
+    let input = document.getElementById("search").value.toUpperCase();
+    let labels = document.getElementById("assetList").getElementsByTagName("label");
+    for(let i=0;i<labels.length;i++){
+        let text = labels[i].innerText.toUpperCase();
+        labels[i].style.display = text.includes(input) ? "" : "none";
+    }
+}
+
+function generateRandomUniqueTimes(start,end,count){
+    let startMin = convertToMinutes(start);
+    let endMin = convertToMinutes(end);
+
+    if(endMin <= startMin) return [];
+
+    let times = new Set();
+
+    while(times.size < count){
+        let rand = Math.floor(Math.random()*(endMin-startMin)) + startMin;
+        times.add(rand);
+    }
+
+    return Array.from(times).sort((a,b)=>a-b);
+}
+
+function convertToMinutes(time){
+    let parts = time.split(":");
+    return parseInt(parts[0])*60 + parseInt(parts[1]);
+}
+
+function formatTime(min){
+    let h = Math.floor(min/60);
+    let m = min%60;
+    return (h<10?"0"+h:h)+":"+(m<10?"0"+m:m);
+}
+
+function generateSignals(){
+
+    let selected = document.querySelectorAll("#assetList input:checked");
+    if(selected.length==0){
+        alert("Select at least 1 asset");
+        return;
+    }
+
+    if(selected.length>5){
+        alert("Max 5 assets allowed");
+        return;
+    }
+
+    let start = document.getElementById("startTime").value;
+    let end = document.getElementById("endTime").value;
+    let count = parseInt(document.getElementById("signalCount").value);
+    let accuracy = document.getElementById("accuracy").value;
+
+    if(!start || !end){
+        alert("Select start and end time");
+        return;
+    }
+
+    let times = generateRandomUniqueTimes(start,end,count);
+
+    let output = "🎯 AI Premium Signals\n";
+    output += "━━━━━━━━━━━━━━━\n";
+    output += "Accuracy: "+accuracy+"\n\n";
+
+    selected.forEach(asset=>{
+        output += "📊 "+asset.value+"\n";
+        times.forEach(t=>{
+            output += "⏰ "+formatTime(t)+" (Follow Previous Candle)\n";
+        });
+        output += "━━━━━━━━━━━━━━━\n";
+    });
+
+    document.getElementById("output").innerText = output;
+}
+
+function copySignals(){
+    let text = document.getElementById("output").innerText;
+    navigator.clipboard.writeText(text);
+    alert("Copied for Telegram ✅");
+}
+
+</script>
+
+</body>
+</html>
