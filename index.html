@@ -29,6 +29,7 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 .access-footer{margin-top:15px;font-size:12px;color:#8fa3c7;}
 .access-footer a{color:#00ffc8;text-decoration:none;font-weight:bold;}
 .access-footer a:hover{text-decoration:underline;}
+.loading-msg{font-size:14px;color:#00ffc8;margin:5px 0;font-weight:bold;}
 </style>
 </head>
 <body>
@@ -96,6 +97,7 @@ Access Required? Contact: <a href="https://t.me/ITBD_Parvej" target="_blank">@IT
 const ACCESS_CODE="125800";
 let accessGranted=false;
 
+/* Access Control */
 function openAccess(){document.getElementById("accessModal").style.display="flex";}
 function checkAccess(){
 let code=document.getElementById("accessInput").value;
@@ -116,6 +118,7 @@ let selectedAsset="";
 let timeframe="M1";
 let lastSignals=[];
 
+/* Asset selection */
 function updateAssets(){
 const market=document.getElementById("market").value;
 currentAssets=market==="REAL"?[...realAssets]:market==="OTC"?[...otcAssets]:[...cryptoAssets];
@@ -146,7 +149,8 @@ document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
 el.classList.add("active");
 }
 
-function generateSignals(){
+/* Professional Signal Generation with Loading Steps */
+async function generateSignals(){
 if(!selectedAsset){alert("Select an asset first");return;}
 
 const direction=document.getElementById("direction").value;
@@ -163,21 +167,32 @@ let endMin=eh*60+em;
 if(endMin<=startMin){alert("End Time must be greater than Start Time");return;}
 if((endMin-startMin)<count){alert("Time range too small for this many signals");return;}
 
+let box=document.getElementById("signals");
+box.innerHTML="";
+
+/* Step Messages */
+const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
+for(let step of steps){
+let delay=Math.floor(Math.random()*6000)+5000; // 5-10 sec
+let div=document.createElement("div");
+div.className="loading-msg";
+div.textContent=step;
+box.appendChild(div);
+await new Promise(r=>setTimeout(r,delay));
+}
+
+/* Generate Signals after steps */
 let usedTimes=new Set();
 let attempts=0;
-
 while(usedTimes.size<count && attempts<10000){
 let randMin=Math.floor(Math.random()*(endMin-startMin-1))+startMin+1;
 usedTimes.add(randMin);
 attempts++;
 }
-
 let timeArray=Array.from(usedTimes).sort((a,b)=>a-b);
 
-let box=document.getElementById("signals");
-box.innerHTML="";
 lastSignals=[];
-
+box.innerHTML="";
 timeArray.forEach(current=>{
 let h=Math.floor(current/60).toString().padStart(2,'0');
 let m=(current%60).toString().padStart(2,'0');
