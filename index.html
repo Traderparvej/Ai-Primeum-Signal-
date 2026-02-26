@@ -35,7 +35,7 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 <body>
 <div class="container">
 <div class="logo">
-<h2>Money Signals AI</h2>
+<h2>itBD Ai Signal</h2>
 <div class="badge">PRO TRADING INTELLIGENCE</div>
 </div>
 
@@ -148,7 +148,6 @@ document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
 el.classList.add("active");
 }
 
-/* 🔥 UPDATED: FULL RANDOM UNIQUE TIME GAP SYSTEM (NO FIXED GAP, NO SAME GAP) */
 function generateSignals(){
 if(!selectedAsset){alert("Select an asset first");return;}
 
@@ -169,14 +168,12 @@ if((endMin-startMin)<count){alert("Time range too small for this many signals");
 let usedTimes=new Set();
 let attempts=0;
 
-// Generate completely random unique minutes inside range
 while(usedTimes.size<count && attempts<10000){
 let randMin=Math.floor(Math.random()*(endMin-startMin-1))+startMin+1;
 usedTimes.add(randMin);
 attempts++;
 }
 
-// Convert to sorted array (chronological signals)
 let timeArray=Array.from(usedTimes).sort((a,b)=>a-b);
 
 let box=document.getElementById("signals");
