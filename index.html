@@ -16,7 +16,7 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 .tf-btn{flex:1;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:#0c1628;color:white;cursor:pointer;}
 .tf-btn.active{background:linear-gradient(90deg,#00ffc8,#00a2ff);color:black;font-weight:bold;}
 .generate-btn{width:100%;padding:16px;margin-top:20px;border:none;border-radius:16px;background:linear-gradient(90deg,#00ffc8,#00a2ff);font-size:16px;font-weight:bold;cursor:pointer;}
-.signal-box{margin-top:20px;background:#061021;border-radius:15px;padding:15px;max-height:260px;overflow:auto;font-family:'Courier New',monospace;font-size:13px;white-space:pre-line;}
+.signal-box{margin-top:20px;background:#061021;border-radius:15px;padding:15px;max-height:300px;overflow:auto;font-family:'Courier New',monospace;font-size:14px;white-space:pre-line;line-height:1.4;}
 .search-wrapper{position:relative;}
 .dropdown{position:absolute;width:100%;background:#0c1628;border-radius:12px;margin-top:5px;max-height:200px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:none;z-index:99;}
 .dropdown div{padding:10px;cursor:pointer;}
@@ -111,7 +111,7 @@ let code=document.getElementById("accessInput").value;
 if(code===ACCESS_CODE){
 accessGranted=true;
 document.getElementById("accessModal").style.display="none";
-generateSignals();
+generateSignalsWithLoading();
 }else{alert("Invalid Access Code");}
 }
 
@@ -125,7 +125,6 @@ let selectedAssets=[];
 let timeframe="M1";
 let lastSignals=[];
 
-/* Update assets */
 function updateAssets(){
 const market=document.getElementById("market").value;
 if(market==="REAL"){currentAssets=[...realAssets];}
@@ -136,7 +135,6 @@ renderSelectedAssets();
 document.getElementById("dropdown").innerHTML="";
 document.getElementById("dropdown").style.display="none";
 }
-
 updateAssets();
 
 function renderSelectedAssets(){
@@ -180,54 +178,69 @@ document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
 el.classList.add("active");
 }
 
-function generateSignals(){
-if(selectedAssets.length===0){alert("Select at least one asset");return;}
-const direction=document.getElementById("direction").value;
-const count=parseInt(document.getElementById("count").value);
-const startTime=document.getElementById("start").value;
-const endTime=document.getElementById("end").value;
+function toUnicodeNumber(num){
+const map=['0','1','2','3','4','5','6','7','8','9'].map((d,i)=>String.fromCodePoint(0x1D7CE+i));
+return num.split('').map(c=>map[c]||c).join('');
+}
 
-let [sh,sm]=startTime.split(":").map(Number);
-let [eh,em]=endTime.split(":").map(Number);
-let startMin=sh*60+sm;
-let endMin=eh*60+em;
-
-if(endMin<=startMin){alert("End Time must be greater than Start Time");return;}
-if((endMin-startMin)<count){alert("Time range too small for this many signals");return;}
-
-let box=document.getElementById("signals");
+// Loading + Signal Generation
+async function generateSignalsWithLoading(){
+const box=document.getElementById("signals");
 box.innerHTML=`🌐 TIMEZONE :UTC+06:00 🇧🇩
 🗓 DATE-${new Date().toLocaleDateString("en-GB").replace(/\//g,".")}
 ➡️ MTG +1
 
 ┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓
 `;
-
 lastSignals=[];
 
+// Loading steps
+const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
+for(let step of steps){
+let div=document.createElement("div");
+div.className="loading-msg";
+div.textContent=step;
+box.appendChild(div);
+await new Promise(r=>setTimeout(r,Math.floor(Math.random()*2000)+1000));
+}
+
+// Generate actual signals
+generateSignals();
+}
+
+function generateSignals(){
+const count=parseInt(document.getElementById("count").value);
+const startTime=document.getElementById("start").value;
+const endTime=document.getElementById("end").value;
+let [sh,sm]=startTime.split(":").map(Number);
+let [eh,em]=endTime.split(":").map(Number);
+let startMin=sh*60+sm;
+let endMin=eh*60+em;
+if(endMin<=startMin || selectedAssets.length===0){return;}
+
+let box=document.getElementById("signals");
 let usedTimes=new Set();
-let attempts=0;
-while(usedTimes.size<count && attempts<10000){
+while(usedTimes.size<count){
 let randMin=Math.floor(Math.random()*(endMin-startMin-1))+startMin+1;
 usedTimes.add(randMin);
-attempts++;
 }
 let timeArray=Array.from(usedTimes).sort((a,b)=>a-b);
 
 let assetIndex=0;
 timeArray.forEach(current=>{
-let h=Math.floor(current/60).toString().padStart(2,'0');
-let m=(current%60).toString().padStart(2,'0');
+let h=toUnicodeNumber(Math.floor(current/60).toString().padStart(2,'0'));
+let m=toUnicodeNumber((current%60).toString().padStart(2,'0'));
 let currentAsset=selectedAssets[assetIndex % selectedAssets.length];
 assetIndex++;
 let assetFormatted=currentAsset.replace("(OTC)","-OTC").replace("/","");
+let direction=document.getElementById("direction").value;
 let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
 let signalText=`${h}:${m}:${assetFormatted}:${dir}`;
 lastSignals.push(signalText);
 box.innerHTML+=signalText+"\n";
 });
 
-box.innerHTML+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
+box.innerHTML+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛\n\n⚠️TRY TO TAKE SAFETY\nMARGIN FOR BETTER ENTRY\nDON'T GO AGAINST MOMENTUM\nAND AVOID LOWER % MARKETS\nBELOW 78%‼️";
 }
 
 function copyTelegram(){
