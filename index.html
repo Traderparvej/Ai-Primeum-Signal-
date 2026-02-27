@@ -224,11 +224,8 @@ let h=Math.floor(current/60).toString().padStart(2,'0');
 let m=(current%60).toString().padStart(2,'0');
 let currentAsset=selectedAssets[assetIndex % selectedAssets.length];
 assetIndex++;
-let assetFormatted=currentAsset.replace("(OTC)","-OTC").replace("/","");
-let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
-let signalText=`${h}:${m}:${assetFormatted}:${dir}`;
-lastSignals.push(signalText);
-box.innerHTML+=`<div>${signalText}</div>`;
+lastSignals.push(`${h}:${m}:${currentAsset}:${direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT"}`);
+box.innerHTML+=`<div>${h}:${m}:${currentAsset}:${direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT"}</div>`;
 });
 }
 
@@ -238,13 +235,19 @@ navigator.clipboard.writeText(lastSignals.join("\n"));
 alert("Signals Copied!");
 }
 
+/* Telegram-ready Copy with fixed format and short names */
 function copyTelegram(){
 if(lastSignals.length===0){alert("Generate signals first!");return;}
 let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n➡️ MTG +1\n\n┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓\n\n";
-lastSignals.forEach(s=>{msg+=s+"\n";});
-msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛\n\n⚠️TRY TO TAKE SAFETY\nMARGIN FOR BETTER ENTRY\nDON'T GO AGAINST MOMENTUM\nAND AVOID LOWER % MARKETS\nBELOW 78%‼️";
+lastSignals.forEach(s=>{
+  let [time, asset, dir] = s.split(":");
+  asset = asset.replace(/\s+/g,'').replace(/\(OTC\)/,'-OTC'); 
+  if(asset.length<10) asset = asset.padEnd(10,' '); 
+  msg += `${time}  ${asset}  ${dir}\n`;
+});
+msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
 navigator.clipboard.writeText(msg);
-alert("Full Telegram Format Copied!");
+alert("Telegram Format Copied!");
 }
 </script>
 </body>
