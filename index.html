@@ -122,17 +122,18 @@ let selectedAssets=[];
 let timeframe="M1";
 let lastSignals=[];
 
+/* Update assets without clearing previous selections */
 function updateAssets(){
 const market=document.getElementById("market").value;
 if(market==="REAL"){currentAssets=[...realAssets];}
 else if(market==="OTC"){currentAssets=[...otcAssets];}
 else if(market==="CRYPTO"){currentAssets=[...cryptoAssets];}
 document.getElementById("assetSearch").value="";
-selectedAssets=[];
-renderSelectedAssets();
+renderSelectedAssets();  // Tags stay
 document.getElementById("dropdown").innerHTML="";
 document.getElementById("dropdown").style.display="none";
 }
+
 updateAssets();
 
 function renderSelectedAssets(){
