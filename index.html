@@ -24,6 +24,8 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 .dropdown div{padding:10px;cursor:pointer;}
 .dropdown div:hover{background:#16233d;}
 #selectedAssetsBox{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;}
+#selectedAssetsBox div{background:#16233d;padding:6px 10px;border-radius:10px;font-size:12px;display:flex;align-items:center;gap:6px;}
+#selectedAssetsBox div span{cursor:pointer;color:#ff4d4d;}
 .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;}
 .modal-box{background:#0c1628;padding:25px;border-radius:18px;width:90%;max-width:350px;text-align:center;}
 .modal-box h3{margin-top:0;}
@@ -100,7 +102,6 @@ Access Required? Contact: <a href="https://t.me/ITBD_Parvej" target="_blank">@IT
 const ACCESS_CODE="125800";
 let accessGranted=false;
 
-/* Access Control */
 function openAccess(){document.getElementById("accessModal").style.display="flex";}
 function checkAccess(){
 let code=document.getElementById("accessInput").value;
@@ -111,7 +112,7 @@ generateSignals();
 }else{alert("Invalid Access Code");}
 }
 
-/* Asset System */
+/* Assets */
 const realAssets=["EUR/USD","GBP/USD","USD/JPY","AUD/JPY","EUR/JPY","GBP/JPY","USD/CAD","AUD/CAD","EUR/GBP","USD/CHF"];
 const otcAssets=["USD/ARS(OTC)","USD/BDT(OTC)","USD/EGP(OTC)","USD/INR(OTC)","USD/IDR(OTC)","USD/MXN(OTC)","EUR/AUD(OTC)","EUR/CHF(OTC)","EUR/SGD(OTC)","GBP/CHF(OTC)","NZD/CAD(OTC)","AUD/NZD(OTC)","CAD/CHF(OTC)","EUR/NZD(OTC)","USD/PHP(OTC)","GBP/NZD(OTC)","USD/BRL(OTC)","USD/ZAR(OTC)","EUR/CAD(OTC)","AUD/CHF(OTC)","CHF/JPY(OTC)","NZD/CHF(OTC)","USD/COP(OTC)","USD/DZD(OTC)","USD/NGN(OTC)","USD/TRY(OTC)","USD/PKR(OTC)","NZD/JPY(OTC)","NZD/USD(OTC)"];
 const cryptoAssets=["Bitcoin (OTC)","Axie Infinity (OTC)","Polkadot (OTC)","Ethereum Classic (OTC)","Ethereum (OTC)","Floki (OTC)","Gala (OTC)","Hamster Kombat (OTC)","Chainlink (OTC)","Litecoin (OTC)","Melania Meme (OTC)","Pepe (OTC)","Shiba Inu (OTC)","Solana (OTC)","Toncoin (OTC)","Trump (OTC)","Dogwifhat (OTC)","Zcash (OTC)","TRON (OTC)","Bonk (OTC)","Ripple (OTC)","Cardano (OTC)","Avalanche (OTC)","Arbitrum (OTC)","Cosmos (OTC)","Bitcoin Cash (OTC)","Decentraland (OTC)","Beam (OTC)","Dogecoin (OTC)","Dash (OTC)","Aptos (OTC)","Binance Coin (OTC)","Celestia (OTC)"];
@@ -121,10 +122,11 @@ let selectedAssets=[];
 let timeframe="M1";
 let lastSignals=[];
 
-/* Asset selection */
 function updateAssets(){
 const market=document.getElementById("market").value;
-currentAssets=market==="REAL"?[...realAssets]:market==="OTC"?[...otcAssets]:[...cryptoAssets];
+if(market==="REAL"){currentAssets=[...realAssets];}
+else if(market==="OTC"){currentAssets=[...otcAssets];}
+else if(market==="CRYPTO"){currentAssets=[...cryptoAssets];}
 document.getElementById("assetSearch").value="";
 selectedAssets=[];
 renderSelectedAssets();
@@ -138,14 +140,7 @@ const box=document.getElementById("selectedAssetsBox");
 box.innerHTML="";
 selectedAssets.forEach((asset,index)=>{
 let tag=document.createElement("div");
-tag.style.background="#16233d";
-tag.style.padding="6px 10px";
-tag.style.borderRadius="10px";
-tag.style.fontSize="12px";
-tag.style.display="flex";
-tag.style.alignItems="center";
-tag.style.gap="6px";
-tag.innerHTML=`${asset} <span style="cursor:pointer;color:#ff4d4d;">❌</span>`;
+tag.innerHTML=`${asset} <span>❌</span>`;
 tag.querySelector("span").onclick=function(){
 selectedAssets.splice(index,1);
 renderSelectedAssets();
@@ -169,7 +164,7 @@ renderSelectedAssets();
 }
 document.getElementById("assetSearch").value="";
 dropdown.style.display="none";
-}
+};
 dropdown.appendChild(div);
 });
 dropdown.style.display = dropdown.childElementCount>0?"block":"none";
@@ -181,10 +176,8 @@ document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
 el.classList.add("active");
 }
 
-/* Signal Generation */
 async function generateSignals(){
 if(selectedAssets.length===0){alert("Select at least one asset");return;}
-
 const direction=document.getElementById("direction").value;
 const count=parseInt(document.getElementById("count").value);
 const startTime=document.getElementById("start").value;
@@ -192,7 +185,6 @@ const endTime=document.getElementById("end").value;
 
 let [sh,sm]=startTime.split(":").map(Number);
 let [eh,em]=endTime.split(":").map(Number);
-
 let startMin=sh*60+sm;
 let endMin=eh*60+em;
 
@@ -202,7 +194,7 @@ if((endMin-startMin)<count){alert("Time range too small for this many signals");
 let box=document.getElementById("signals");
 box.innerHTML="";
 
-/* Step Messages */
+/* Loading Steps */
 const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
 for(let step of steps){
 let delay=Math.floor(Math.random()*6000)+5000;
@@ -229,14 +221,11 @@ let assetIndex=0;
 timeArray.forEach(current=>{
 let h=Math.floor(current/60).toString().padStart(2,'0');
 let m=(current%60).toString().padStart(2,'0');
-
 let currentAsset=selectedAssets[assetIndex % selectedAssets.length];
 assetIndex++;
-
 let assetFormatted=currentAsset.replace("(OTC)","-OTC").replace("/","");
 let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
 let signalText=`${h}:${m}:${assetFormatted}:${dir}`;
-
 lastSignals.push(signalText);
 box.innerHTML+=`<div>${signalText}</div>`;
 });
