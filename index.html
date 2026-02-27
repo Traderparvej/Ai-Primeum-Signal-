@@ -16,7 +16,7 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 .tf-btn{flex:1;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:#0c1628;color:white;cursor:pointer;}
 .tf-btn.active{background:linear-gradient(90deg,#00ffc8,#00a2ff);color:black;font-weight:bold;}
 .generate-btn{width:100%;padding:16px;margin-top:20px;border:none;border-radius:16px;background:linear-gradient(90deg,#00ffc8,#00a2ff);font-size:16px;font-weight:bold;cursor:pointer;}
-.signal-box{margin-top:20px;background:#061021;border-radius:15px;padding:15px;max-height:260px;overflow:auto;font-family:'Courier New',monospace;font-size:13px;}
+.signal-box{margin-top:20px;background:#061021;border-radius:15px;padding:15px;max-height:260px;overflow:auto;font-family:'Courier New',monospace;font-size:13px;white-space:pre-line;}
 .btn{width:100%;padding:13px;margin-top:12px;border:none;border-radius:14px;background:#111f38;color:white;cursor:pointer;font-weight:bold;}
 .search-wrapper{position:relative;}
 .dropdown{position:absolute;width:100%;background:#0c1628;border-radius:12px;margin-top:5px;max-height:200px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:none;z-index:99;}
@@ -120,14 +120,13 @@ let selectedAssets=[];
 let timeframe="M1";
 let lastSignals=[];
 
-/* Update assets without clearing previous selections */
 function updateAssets(){
 const market=document.getElementById("market").value;
 if(market==="REAL"){currentAssets=[...realAssets];}
 else if(market==="OTC"){currentAssets=[...otcAssets];}
 else if(market==="CRYPTO"){currentAssets=[...cryptoAssets];}
 document.getElementById("assetSearch").value="";
-renderSelectedAssets();  // Tags stay
+renderSelectedAssets();
 document.getElementById("dropdown").innerHTML="";
 document.getElementById("dropdown").style.display="none";
 }
@@ -194,7 +193,7 @@ let box=document.getElementById("signals");
 box.innerHTML="";
 
 /* Loading Steps */
-const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","API Testing..."];
+const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
 for(let step of steps){
 let delay=Math.floor(Math.random()*6000)+5000;
 let div=document.createElement("div");
@@ -226,8 +225,17 @@ let assetFormatted=currentAsset.replace("(OTC)","-OTC").replace("/","");
 let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
 let signalText=`${h}:${m}:${assetFormatted}:${dir}`;
 lastSignals.push(signalText);
-box.innerHTML+=`<div>${signalText}</div>`;
 });
+
+displaySignalsBox();
+}
+
+function displaySignalsBox(){
+let box=document.getElementById("signals");
+let msg=`🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-${new Date().toLocaleDateString("en-GB").replace(/\//g,".")}\n➡️ MTG +1\n\n┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓\n\n`;
+lastSignals.forEach(s=>{msg+=s+"\n";});
+msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
+box.textContent=msg;
 }
 
 function copySignals(){
