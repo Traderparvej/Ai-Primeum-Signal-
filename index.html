@@ -86,7 +86,6 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 </div>
 </div>
 
-<!-- Access Modal -->
 <div class="modal" id="accessModal">
 <div class="modal-box">
 <h3>🔐 Premium Access Required</h3>
@@ -122,14 +121,13 @@ let selectedAssets=[];
 let timeframe="M1";
 let lastSignals=[];
 
-/* Update assets without clearing previous selections */
 function updateAssets(){
 const market=document.getElementById("market").value;
 if(market==="REAL"){currentAssets=[...realAssets];}
 else if(market==="OTC"){currentAssets=[...otcAssets];}
 else if(market==="CRYPTO"){currentAssets=[...cryptoAssets];}
 document.getElementById("assetSearch").value="";
-renderSelectedAssets();  // Tags stay
+renderSelectedAssets();
 document.getElementById("dropdown").innerHTML="";
 document.getElementById("dropdown").style.display="none";
 }
@@ -195,7 +193,6 @@ if((endMin-startMin)<count){alert("Time range too small for this many signals");
 let box=document.getElementById("signals");
 box.innerHTML="";
 
-/* Loading Steps */
 const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
 for(let step of steps){
 let delay=Math.floor(Math.random()*6000)+5000;
@@ -206,7 +203,6 @@ box.appendChild(div);
 await new Promise(r=>setTimeout(r,delay));
 }
 
-/* Generate Signals */
 let usedTimes=new Set();
 let attempts=0;
 while(usedTimes.size<count && attempts<10000){
@@ -224,8 +220,9 @@ let h=Math.floor(current/60).toString().padStart(2,'0');
 let m=(current%60).toString().padStart(2,'0');
 let currentAsset=selectedAssets[assetIndex % selectedAssets.length];
 assetIndex++;
-lastSignals.push(`${h}:${m}:${currentAsset}:${direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT"}`);
-box.innerHTML+=`<div>${h}:${m}:${currentAsset}:${direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT"}</div>`;
+let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
+lastSignals.push(`${h}:${m}:${currentAsset}:${dir}`);
+box.innerHTML+=`<div>${h}:${m}:${currentAsset}:${dir}</div>`;
 });
 }
 
@@ -235,15 +232,26 @@ navigator.clipboard.writeText(lastSignals.join("\n"));
 alert("Signals Copied!");
 }
 
-/* Telegram-ready Copy with fixed format and short names */
+/* Unicode fancy converter */
+function toFancy(text){
+const digits="0123456789";
+const fancyDigits="𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
+const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const fancyLetters="𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉𝚊𝚋𝚌𝚍𝚎𝚏𝚐𝚑𝚒𝚓𝚔𝚕𝚖𝚗𝚘𝚙𝚚𝚛𝚜𝚝𝚞𝚟𝚠𝚡𝚢𝚣";
+return text.split("").map(c=>{
+let idx=digits.indexOf(c);if(idx>=0)return fancyDigits[idx];
+idx=letters.indexOf(c);if(idx>=0)return fancyLetters[idx];
+return c;
+}).join("");
+}
+
 function copyTelegram(){
 if(lastSignals.length===0){alert("Generate signals first!");return;}
 let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n➡️ MTG +1\n\n┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓\n\n";
 lastSignals.forEach(s=>{
-  let [time, asset, dir] = s.split(":");
-  asset = asset.replace(/\s+/g,'').replace(/\(OTC\)/,'-OTC'); 
-  if(asset.length<10) asset = asset.padEnd(10,' '); 
-  msg += `${time}  ${asset}  ${dir}\n`;
+let [time, asset, dir]=s.split(":");
+asset=asset.replace(/\s+/g,'').replace(/\(OTC\)/,'-OTC');
+msg+=toFancy(time)+":"+toFancy(asset)+":"+toFancy(dir)+"\n";
 });
 msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
 navigator.clipboard.writeText(msg);
