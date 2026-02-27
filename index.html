@@ -18,7 +18,6 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 .generate-btn{width:100%;padding:16px;margin-top:20px;border:none;border-radius:16px;background:linear-gradient(90deg,#00ffc8,#00a2ff);font-size:16px;font-weight:bold;cursor:pointer;}
 .signal-box{margin-top:20px;background:#061021;border-radius:15px;padding:15px;max-height:260px;overflow:auto;font-family:'Courier New',monospace;font-size:13px;}
 .btn{width:100%;padding:13px;margin-top:12px;border:none;border-radius:14px;background:#111f38;color:white;cursor:pointer;font-weight:bold;}
-.telegram{background:linear-gradient(90deg,#229ED9,#0088cc);}
 .search-wrapper{position:relative;}
 .dropdown{position:absolute;width:100%;background:#0c1628;border-radius:12px;margin-top:5px;max-height:200px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:none;z-index:99;}
 .dropdown div{padding:10px;cursor:pointer;}
@@ -82,7 +81,6 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 
 <div class="signal-box" id="signals"></div>
 <button class="btn" onclick="copySignals()">📋 Copy All Signals</button>
-<button class="btn telegram" onclick="copyTelegram()">📱 Copy for Telegram</button>
 </div>
 </div>
 
@@ -196,7 +194,7 @@ let box=document.getElementById("signals");
 box.innerHTML="";
 
 /* Loading Steps */
-const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
+const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","API Testing..."];
 for(let step of steps){
 let delay=Math.floor(Math.random()*6000)+5000;
 let div=document.createElement("div");
@@ -234,17 +232,11 @@ box.innerHTML+=`<div>${signalText}</div>`;
 
 function copySignals(){
 if(lastSignals.length===0){alert("Generate signals first!");return;}
-navigator.clipboard.writeText(lastSignals.join("\n"));
-alert("Signals Copied!");
-}
-
-function copyTelegram(){
-if(lastSignals.length===0){alert("Generate signals first!");return;}
-let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n➡️ MTG +1\n\n┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓\n\n";
+let msg=`🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-${new Date().toLocaleDateString("en-GB").replace(/\//g,".")}\n➡️ MTG +1\n\n┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓\n\n`;
 lastSignals.forEach(s=>{msg+=s+"\n";});
-msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛\n\n⚠️TRY TO TAKE SAFETY\nMARGIN FOR BETTER ENTRY\nDON'T GO AGAINST MOMENTUM\nAND AVOID LOWER % MARKETS\nBELOW 78%‼️";
+msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
 navigator.clipboard.writeText(msg);
-alert("Full Telegram Format Copied!");
+alert("Signals Copied in Correct Format!");
 }
 </script>
 </body>
