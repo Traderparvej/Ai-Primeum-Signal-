@@ -9,9 +9,6 @@ body{margin:0;font-family:'Segoe UI',sans-serif;background:radial-gradient(circl
 .container{max-width:520px;margin:auto;padding:20px;}
 .logo{text-align:center;margin-top:15px;}
 .logo img{max-width:320px;width:100%;display:block;margin:25px auto;border-radius:12px;}
-.device-panel{background:rgba(17,26,46,0.75);backdrop-filter:blur(18px);border-radius:18px;padding:15px;margin-top:10px;text-align:center;box-shadow:0 0 25px rgba(0,255,200,0.08);font-size:13px;}
-.status-online{color:#00ffc8;font-weight:bold;}
-.status-offline{color:#ff4d4d;font-weight:bold;}
 .card{background:rgba(17,26,46,0.75);backdrop-filter:blur(18px);border-radius:20px;padding:22px;margin-top:18px;box-shadow:0 0 40px rgba(0,255,200,0.08);}
 label{font-size:12px;color:#8fa3c7;display:block;margin-top:15px;}
 select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,0.05);background:#0c1628;color:white;font-size:13px;margin-top:6px;}
@@ -28,19 +25,17 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 .dropdown div:hover{background:#16233d;}
 .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;}
 .modal-box{background:#0c1628;padding:25px;border-radius:18px;width:90%;max-width:350px;text-align:center;}
+.modal-box h3{margin-top:0;}
+.access-footer{margin-top:15px;font-size:12px;color:#8fa3c7;}
+.access-footer a{color:#00ffc8;text-decoration:none;font-weight:bold;}
+.access-footer a:hover{text-decoration:underline;}
 .loading-msg{font-size:14px;color:#00ffc8;margin:5px 0;font-weight:bold;}
 </style>
 </head>
 <body>
-
 <div class="container">
 <div class="logo">
-<img src="https://i.ibb.co.com/W4CG21z8/Chat-GPT-Image-Feb-26-2026-11-13-39-PM.png">
-</div>
-
-<div class="device-panel">
-<div><b>Device ID:</b> <span id="deviceId"></span></div>
-<div>Status: <span id="deviceStatus" class="status-offline">Offline</span></div>
+<img src="https://i.ibb.co.com/W4CG21z8/Chat-GPT-Image-Feb-26-2026-11-13-39-PM.png" alt="itBD Ai Logo">
 </div>
 
 <div class="card">
@@ -81,8 +76,7 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 <button class="generate-btn" onclick="openAccess()">Generate AI Signals</button>
 
 <div class="signal-box" id="signals"></div>
-
-<button class="btn" id="copyBtn" onclick="copySignals()">📋 Copy All Signals</button>
+<button class="btn" onclick="copySignals()">📋 Copy All Signals</button>
 <button class="btn telegram" onclick="copyTelegram()">📱 Copy for Telegram</button>
 </div>
 </div>
@@ -93,90 +87,45 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 <h3>🔐 Premium Access Required</h3>
 <input type="password" id="accessInput" placeholder="Enter Access Code">
 <button class="generate-btn" onclick="checkAccess()">Unlock</button>
-</div>
-</div>
-
-<!-- Admin Panel -->
-<div class="modal" id="adminModal">
-<div class="modal-box">
-<h3>⚙️ Admin Panel</h3>
-<input type="password" id="adminPass" placeholder="Admin Password">
-<button class="generate-btn" onclick="adminLogin()">Login</button>
-<div id="adminArea" style="display:none;">
-<br>
-<input type="text" id="activateId" placeholder="Enter Device ID">
-<button class="generate-btn" onclick="activateDevice()">Activate Device</button>
+<div class="access-footer">
+Access Required? Contact: <a href="https://t.me/ITBD_Parvej" target="_blank">@ITBD_Parvej</a>
 </div>
 </div>
 </div>
 
 <script>
 const ACCESS_CODE="125800";
-const ADMIN_PASS="Parvej4067@@";
-let deviceId="";
-let lastSignals=[];
-let clickCount=0;
+let accessGranted=false;
 
-/* Device ID */
-async function generateDeviceId(){
-let ip="0.0.0.0";
-try{
-let res=await fetch("https://api.ipify.org?format=json");
-let data=await res.json();
-ip=data.ip;
-}catch{}
-let raw=navigator.userAgent+navigator.language+screen.width+screen.height+ip;
-deviceId=btoa(raw).substring(0,20).toUpperCase();
-document.getElementById("deviceId").innerText=deviceId;
-if(localStorage.getItem("ACTIVE_"+deviceId)){setOnline();}else{setOffline();}
-}
-generateDeviceId();
-
-function setOnline(){let el=document.getElementById("deviceStatus");el.innerText="Online";el.className="status-online";}
-function setOffline(){let el=document.getElementById("deviceStatus");el.innerText="Offline";el.className="status-offline";}
-
-function openAccess(){
-if(!localStorage.getItem("ACTIVE_"+deviceId)){alert("Device Offline! Contact Admin.");return;}
-document.getElementById("accessModal").style.display="flex";
-}
-
+/* Access Control */
+function openAccess(){document.getElementById("accessModal").style.display="flex";}
 function checkAccess(){
-if(document.getElementById("accessInput").value===ACCESS_CODE){
+let code=document.getElementById("accessInput").value;
+if(code===ACCESS_CODE){
+accessGranted=true;
 document.getElementById("accessModal").style.display="none";
 generateSignals();
 }else{alert("Invalid Access Code");}
 }
 
-/* Hidden Admin */
-document.getElementById("copyBtn").addEventListener("click",function(){
-clickCount++;
-if(clickCount>=5){document.getElementById("adminModal").style.display="flex";clickCount=0;}
-});
-
-function adminLogin(){
-if(document.getElementById("adminPass").value===ADMIN_PASS){
-document.getElementById("adminArea").style.display="block";
-}else{alert("Wrong Admin Password");}
-}
-
-function activateDevice(){
-let id=document.getElementById("activateId").value.trim();
-if(id){localStorage.setItem("ACTIVE_"+id,"YES");alert("Device Activated!");if(id===deviceId){setOnline();}}
-}
-
-/* ===== ORIGINAL FULL ASSET LIST RESTORED ===== */
-
+/* Asset System */
 const realAssets=["EUR/USD","GBP/USD","USD/JPY","AUD/JPY","EUR/JPY","GBP/JPY","USD/CAD","AUD/CAD","EUR/GBP","USD/CHF"];
-
 const otcAssets=["USD/ARS(OTC)","USD/BDT(OTC)","USD/EGP(OTC)","USD/INR(OTC)","USD/IDR(OTC)","USD/MXN(OTC)","EUR/AUD(OTC)","EUR/CHF(OTC)","EUR/SGD(OTC)","GBP/CHF(OTC)","NZD/CAD(OTC)","AUD/NZD(OTC)","CAD/CHF(OTC)","EUR/NZD(OTC)","USD/PHP(OTC)","GBP/NZD(OTC)","USD/BRL(OTC)","USD/ZAR(OTC)","EUR/CAD(OTC)","AUD/CHF(OTC)","CHF/JPY(OTC)","NZD/CHF(OTC)","USD/COP(OTC)","USD/DZD(OTC)","USD/NGN(OTC)","USD/TRY(OTC)","USD/PKR(OTC)","NZD/JPY(OTC)","NZD/USD(OTC)"];
-
 const cryptoAssets=["Bitcoin (OTC)","Axie Infinity (OTC)","Polkadot (OTC)","Ethereum Classic (OTC)","Ethereum (OTC)","Floki (OTC)","Gala (OTC)","Hamster Kombat (OTC)","Chainlink (OTC)","Litecoin (OTC)","Melania Meme (OTC)","Pepe (OTC)","Shiba Inu (OTC)","Solana (OTC)","Toncoin (OTC)","Trump (OTC)","Dogwifhat (OTC)","Zcash (OTC)","TRON (OTC)","Bonk (OTC)","Ripple (OTC)","Cardano (OTC)","Avalanche (OTC)","Arbitrum (OTC)","Cosmos (OTC)","Bitcoin Cash (OTC)","Decentraland (OTC)","Beam (OTC)","Dogecoin (OTC)","Dash (OTC)","Aptos (OTC)","Binance Coin (OTC)","Celestia (OTC)"];
 
-let currentAssets=[],selectedAsset="",timeframe="M1";
+let currentAssets=[];
+let selectedAsset="";
+let timeframe="M1";
+let lastSignals=[];
 
+/* Asset selection */
 function updateAssets(){
 const market=document.getElementById("market").value;
 currentAssets=market==="REAL"?[...realAssets]:market==="OTC"?[...otcAssets]:[...cryptoAssets];
+document.getElementById("assetSearch").value="";
+selectedAsset="";
+document.getElementById("dropdown").innerHTML="";
+document.getElementById("dropdown").style.display="none";
 }
 updateAssets();
 
@@ -191,7 +140,7 @@ div.textContent=a;
 div.onclick=function(){selectedAsset=a;document.getElementById("assetSearch").value=a;dropdown.style.display="none";}
 dropdown.appendChild(div);
 });
-dropdown.style.display=dropdown.childElementCount?"block":"none";
+if(dropdown.childElementCount>0){dropdown.style.display="block";}else{dropdown.style.display="none";}
 }
 
 function setTF(tf,el){
@@ -200,8 +149,7 @@ document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
 el.classList.add("active");
 }
 
-/* ORIGINAL SIGNAL LOGIC */
-
+/* Professional Signal Generation with Loading Steps */
 async function generateSignals(){
 if(!selectedAsset){alert("Select an asset first");return;}
 
@@ -212,18 +160,20 @@ const endTime=document.getElementById("end").value;
 
 let [sh,sm]=startTime.split(":").map(Number);
 let [eh,em]=endTime.split(":").map(Number);
+
 let startMin=sh*60+sm;
 let endMin=eh*60+em;
 
 if(endMin<=startMin){alert("End Time must be greater than Start Time");return;}
-if((endMin-startMin)<count){alert("Time range too small");return;}
+if((endMin-startMin)<count){alert("Time range too small for this many signals");return;}
 
 let box=document.getElementById("signals");
 box.innerHTML="";
 
+/* Step Messages */
 const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
 for(let step of steps){
-let delay=Math.floor(Math.random()*6000)+5000;
+let delay=Math.floor(Math.random()*6000)+5000; // 5-10 sec
 let div=document.createElement("div");
 div.className="loading-msg";
 div.textContent=step;
@@ -231,7 +181,9 @@ box.appendChild(div);
 await new Promise(r=>setTimeout(r,delay));
 }
 
-let usedTimes=new Set(),attempts=0;
+/* Generate Signals after steps */
+let usedTimes=new Set();
+let attempts=0;
 while(usedTimes.size<count && attempts<10000){
 let randMin=Math.floor(Math.random()*(endMin-startMin-1))+startMin+1;
 usedTimes.add(randMin);
@@ -262,7 +214,7 @@ function copyTelegram(){
 if(lastSignals.length===0){alert("Generate signals first!");return;}
 let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n➡️ MTG +1\n\n┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓\n\n";
 lastSignals.forEach(s=>{msg+=s+"\n";});
-msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
+msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛\n\n⚠️TRY TO TAKE SAFETY\nMARGIN FOR BETTER ENTRY\nDON'T GO AGAINST MOMENTUM\nAND AVOID LOWER % MARKETS\nBELOW 78%‼️";
 navigator.clipboard.writeText(msg);
 alert("Full Telegram Format Copied!");
 }
