@@ -23,6 +23,7 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 .dropdown{position:absolute;width:100%;background:#0c1628;border-radius:12px;margin-top:5px;max-height:200px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:none;z-index:99;}
 .dropdown div{padding:10px;cursor:pointer;}
 .dropdown div:hover{background:#16233d;}
+#selectedAssetsBox{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px;}
 .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;}
 .modal-box{background:#0c1628;padding:25px;border-radius:18px;width:90%;max-width:350px;text-align:center;}
 .modal-box h3{margin-top:0;}
@@ -51,6 +52,8 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 <input type="text" id="assetSearch" placeholder="Search and select asset..." onkeyup="filterAssets()">
 <div class="dropdown" id="dropdown"></div>
 </div>
+
+<div id="selectedAssetsBox"></div>
 
 <label>Direction</label>
 <select id="direction">
@@ -114,7 +117,7 @@ const otcAssets=["USD/ARS(OTC)","USD/BDT(OTC)","USD/EGP(OTC)","USD/INR(OTC)","US
 const cryptoAssets=["Bitcoin (OTC)","Axie Infinity (OTC)","Polkadot (OTC)","Ethereum Classic (OTC)","Ethereum (OTC)","Floki (OTC)","Gala (OTC)","Hamster Kombat (OTC)","Chainlink (OTC)","Litecoin (OTC)","Melania Meme (OTC)","Pepe (OTC)","Shiba Inu (OTC)","Solana (OTC)","Toncoin (OTC)","Trump (OTC)","Dogwifhat (OTC)","Zcash (OTC)","TRON (OTC)","Bonk (OTC)","Ripple (OTC)","Cardano (OTC)","Avalanche (OTC)","Arbitrum (OTC)","Cosmos (OTC)","Bitcoin Cash (OTC)","Decentraland (OTC)","Beam (OTC)","Dogecoin (OTC)","Dash (OTC)","Aptos (OTC)","Binance Coin (OTC)","Celestia (OTC)"];
 
 let currentAssets=[];
-let selectedAsset="";
+let selectedAssets=[];
 let timeframe="M1";
 let lastSignals=[];
 
@@ -123,11 +126,33 @@ function updateAssets(){
 const market=document.getElementById("market").value;
 currentAssets=market==="REAL"?[...realAssets]:market==="OTC"?[...otcAssets]:[...cryptoAssets];
 document.getElementById("assetSearch").value="";
-selectedAsset="";
+selectedAssets=[];
+renderSelectedAssets();
 document.getElementById("dropdown").innerHTML="";
 document.getElementById("dropdown").style.display="none";
 }
 updateAssets();
+
+function renderSelectedAssets(){
+const box=document.getElementById("selectedAssetsBox");
+box.innerHTML="";
+selectedAssets.forEach((asset,index)=>{
+let tag=document.createElement("div");
+tag.style.background="#16233d";
+tag.style.padding="6px 10px";
+tag.style.borderRadius="10px";
+tag.style.fontSize="12px";
+tag.style.display="flex";
+tag.style.alignItems="center";
+tag.style.gap="6px";
+tag.innerHTML=`${asset} <span style="cursor:pointer;color:#ff4d4d;">❌</span>`;
+tag.querySelector("span").onclick=function(){
+selectedAssets.splice(index,1);
+renderSelectedAssets();
+};
+box.appendChild(tag);
+});
+}
 
 function filterAssets(){
 const text=document.getElementById("assetSearch").value.toUpperCase();
@@ -137,10 +162,17 @@ if(text===""){dropdown.style.display="none";return;}
 currentAssets.filter(a=>a.toUpperCase().includes(text)).forEach(a=>{
 let div=document.createElement("div");
 div.textContent=a;
-div.onclick=function(){selectedAsset=a;document.getElementById("assetSearch").value=a;dropdown.style.display="none";}
+div.onclick=function(){
+if(!selectedAssets.includes(a)){
+selectedAssets.push(a);
+renderSelectedAssets();
+}
+document.getElementById("assetSearch").value="";
+dropdown.style.display="none";
+}
 dropdown.appendChild(div);
 });
-if(dropdown.childElementCount>0){dropdown.style.display="block";}else{dropdown.style.display="none";}
+dropdown.style.display = dropdown.childElementCount>0?"block":"none";
 }
 
 function setTF(tf,el){
@@ -149,9 +181,9 @@ document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
 el.classList.add("active");
 }
 
-/* Professional Signal Generation with Loading Steps */
+/* Signal Generation */
 async function generateSignals(){
-if(!selectedAsset){alert("Select an asset first");return;}
+if(selectedAssets.length===0){alert("Select at least one asset");return;}
 
 const direction=document.getElementById("direction").value;
 const count=parseInt(document.getElementById("count").value);
@@ -173,7 +205,7 @@ box.innerHTML="";
 /* Step Messages */
 const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
 for(let step of steps){
-let delay=Math.floor(Math.random()*6000)+5000; // 5-10 sec
+let delay=Math.floor(Math.random()*6000)+5000;
 let div=document.createElement("div");
 div.className="loading-msg";
 div.textContent=step;
@@ -181,7 +213,7 @@ box.appendChild(div);
 await new Promise(r=>setTimeout(r,delay));
 }
 
-/* Generate Signals after steps */
+/* Generate Signals */
 let usedTimes=new Set();
 let attempts=0;
 while(usedTimes.size<count && attempts<10000){
@@ -193,12 +225,18 @@ let timeArray=Array.from(usedTimes).sort((a,b)=>a-b);
 
 lastSignals=[];
 box.innerHTML="";
+let assetIndex=0;
 timeArray.forEach(current=>{
 let h=Math.floor(current/60).toString().padStart(2,'0');
 let m=(current%60).toString().padStart(2,'0');
-let assetFormatted=selectedAsset.replace("(OTC)","-OTC").replace("/","");
+
+let currentAsset=selectedAssets[assetIndex % selectedAssets.length];
+assetIndex++;
+
+let assetFormatted=currentAsset.replace("(OTC)","-OTC").replace("/","");
 let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
 let signalText=`${h}:${m}:${assetFormatted}:${dir}`;
+
 lastSignals.push(signalText);
 box.innerHTML+=`<div>${signalText}</div>`;
 });
