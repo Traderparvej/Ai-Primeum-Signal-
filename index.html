@@ -16,9 +16,7 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 .tf-btn{flex:1;padding:10px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);background:#0c1628;color:white;cursor:pointer;}
 .tf-btn.active{background:linear-gradient(90deg,#00ffc8,#00a2ff);color:black;font-weight:bold;}
 .generate-btn{width:100%;padding:16px;margin-top:20px;border:none;border-radius:16px;background:linear-gradient(90deg,#00ffc8,#00a2ff);font-size:16px;font-weight:bold;cursor:pointer;}
-.signal-box{margin-top:20px;background:#061021;border-radius:15px;padding:15px;max-height:260px;overflow:auto;font-family:'Courier New',monospace;font-size:13px;}
-.btn{width:100%;padding:13px;margin-top:12px;border:none;border-radius:14px;background:#111f38;color:white;cursor:pointer;font-weight:bold;}
-.telegram{background:linear-gradient(90deg,#229ED9,#0088cc);}
+.signal-box{margin-top:20px;background:#061021;border-radius:15px;padding:15px;max-height:260px;overflow:auto;font-family:'Courier New',monospace;font-size:13px;white-space:pre-line;}
 .search-wrapper{position:relative;}
 .dropdown{position:absolute;width:100%;background:#0c1628;border-radius:12px;margin-top:5px;max-height:200px;overflow:auto;border:1px solid rgba(255,255,255,0.05);display:none;z-index:99;}
 .dropdown div{padding:10px;cursor:pointer;}
@@ -38,7 +36,7 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 <body>
 <div class="container">
 <div class="logo">
-<img src="https://i.ibb.co.com/W4CG21z8/Chat-GPT-Image-Feb-26-2026-11-13-39-PM.png" alt="itBD Ai Logo">
+<img src="https://i.ibb.co/W4CG21z8/Chat-GPT-Image-Feb-26-2026-11-13-39-PM.png" alt="itBD Ai Logo">
 </div>
 
 <div class="card">
@@ -80,9 +78,14 @@ select,input{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(25
 <input type="time" id="end" value="21:00">
 <button class="generate-btn" onclick="openAccess()">Generate AI Signals</button>
 
-<div class="signal-box" id="signals"></div>
-<button class="btn" onclick="copySignals()">📋 Copy All Signals</button>
-<button class="btn telegram" onclick="copyTelegram()">📱 Copy for Telegram</button>
+<div class="signal-box" id="signals">
+🌐 TIMEZONE :UTC+06:00 🇧🇩
+🗓 DATE-28.02.2026
+➡️ MTG +1
+
+┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓
+</div>
+<button class="generate-btn" onclick="copyTelegram()">📋 Copy All Signals</button>
 </div>
 </div>
 
@@ -122,14 +125,14 @@ let selectedAssets=[];
 let timeframe="M1";
 let lastSignals=[];
 
-/* Update assets without clearing previous selections */
+/* Update assets */
 function updateAssets(){
 const market=document.getElementById("market").value;
 if(market==="REAL"){currentAssets=[...realAssets];}
 else if(market==="OTC"){currentAssets=[...otcAssets];}
 else if(market==="CRYPTO"){currentAssets=[...cryptoAssets];}
 document.getElementById("assetSearch").value="";
-renderSelectedAssets();  // Tags stay
+renderSelectedAssets();  
 document.getElementById("dropdown").innerHTML="";
 document.getElementById("dropdown").style.display="none";
 }
@@ -177,7 +180,7 @@ document.querySelectorAll(".tf-btn").forEach(b=>b.classList.remove("active"));
 el.classList.add("active");
 }
 
-async function generateSignals(){
+function generateSignals(){
 if(selectedAssets.length===0){alert("Select at least one asset");return;}
 const direction=document.getElementById("direction").value;
 const count=parseInt(document.getElementById("count").value);
@@ -193,20 +196,15 @@ if(endMin<=startMin){alert("End Time must be greater than Start Time");return;}
 if((endMin-startMin)<count){alert("Time range too small for this many signals");return;}
 
 let box=document.getElementById("signals");
-box.innerHTML="";
+box.innerHTML=`🌐 TIMEZONE :UTC+06:00 🇧🇩
+🗓 DATE-${new Date().toLocaleDateString("en-GB").replace(/\//g,".")}
+➡️ MTG +1
 
-/* Loading Steps */
-const steps=["itBD Ai Signal Generating...","Ai Signal Filtering...","Quotex API Testing..."];
-for(let step of steps){
-let delay=Math.floor(Math.random()*6000)+5000;
-let div=document.createElement("div");
-div.className="loading-msg";
-div.textContent=step;
-box.appendChild(div);
-await new Promise(r=>setTimeout(r,delay));
-}
+┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓
+`;
 
-/* Generate Signals */
+lastSignals=[];
+
 let usedTimes=new Set();
 let attempts=0;
 while(usedTimes.size<count && attempts<10000){
@@ -216,8 +214,6 @@ attempts++;
 }
 let timeArray=Array.from(usedTimes).sort((a,b)=>a-b);
 
-lastSignals=[];
-box.innerHTML="";
 let assetIndex=0;
 timeArray.forEach(current=>{
 let h=Math.floor(current/60).toString().padStart(2,'0');
@@ -228,14 +224,10 @@ let assetFormatted=currentAsset.replace("(OTC)","-OTC").replace("/","");
 let dir=direction==="CALL"?"BUY":direction==="PUT"?"PUT":Math.random()>0.5?"BUY":"PUT";
 let signalText=`${h}:${m}:${assetFormatted}:${dir}`;
 lastSignals.push(signalText);
-box.innerHTML+=`<div>${signalText}</div>`;
+box.innerHTML+=signalText+"\n";
 });
-}
 
-function copySignals(){
-if(lastSignals.length===0){alert("Generate signals first!");return;}
-navigator.clipboard.writeText(lastSignals.join("\n"));
-alert("Signals Copied!");
+box.innerHTML+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
 }
 
 function copyTelegram(){
