@@ -232,7 +232,6 @@ navigator.clipboard.writeText(lastSignals.join("\n"));
 alert("Signals Copied!");
 }
 
-/* Fancy Unicode converter */
 function toFancy(text){
 const digits="0123456789";
 const fancyDigits="𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
@@ -257,8 +256,11 @@ msg += toFancy(timeH+":"+timeM)+":"+toFancy(asset)+":"+toFancy(dir)+"\n";
 });
 msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
 
-navigator.clipboard.writeText(msg).then(()=>alert("Telegram Format Copied!")).catch(err=>{
-alert("Copy failed. Make sure your browser allows clipboard write.");console.error(err);
+navigator.clipboard.writeText(msg)
+.then(()=>alert("Telegram Format Copied!"))
+.catch(err=>{
+alert("Copy failed. Use HTTPS or localhost server. Check browser permission.");
+console.error(err);
 });
 }
 </script>
