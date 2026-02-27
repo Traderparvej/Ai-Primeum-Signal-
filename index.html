@@ -232,7 +232,7 @@ navigator.clipboard.writeText(lastSignals.join("\n"));
 alert("Signals Copied!");
 }
 
-/* Unicode fancy converter */
+/* Fancy Unicode converter */
 function toFancy(text){
 const digits="0123456789";
 const fancyDigits="𝟶𝟷𝟸𝟹𝟺𝟻𝟼𝟽𝟾𝟿";
@@ -247,15 +247,19 @@ return c;
 
 function copyTelegram(){
 if(lastSignals.length===0){alert("Generate signals first!");return;}
-let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+new Date().toLocaleDateString("en-GB").replace(/\//g,".")+"\n➡️ MTG +1\n\n┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓\n\n";
+let dateStr = new Date().toLocaleDateString("en-GB").replace(/\//g,".");
+let msg="🌐 TIMEZONE :UTC+06:00 🇧🇩\n🗓 DATE-"+dateStr+"\n➡️ MTG +1\n\n┏━━━❰⭐️itBD EXTREME⭐️❱━━━┓\n\n";
 lastSignals.forEach(s=>{
-let [time, asset, dir]=s.split(":");
-asset=asset.replace(/\s+/g,'').replace(/\(OTC\)/,'-OTC');
-msg+=toFancy(time)+":"+toFancy(asset)+":"+toFancy(dir)+"\n";
+let [timeH,timeM, ...rest] = s.split(":");
+let dir = rest.pop();
+let asset = rest.join(":").replace(/\(OTC\)/,'-OTC').replace(/\s+/g,'');
+msg += toFancy(timeH+":"+timeM)+":"+toFancy(asset)+":"+toFancy(dir)+"\n";
 });
 msg+="\n┗━━━❰⭐️itBD EXTREME⭐️❱━━━┛";
-navigator.clipboard.writeText(msg);
-alert("Telegram Format Copied!");
+
+navigator.clipboard.writeText(msg).then(()=>alert("Telegram Format Copied!")).catch(err=>{
+alert("Copy failed. Make sure your browser allows clipboard write.");console.error(err);
+});
 }
 </script>
 </body>
